@@ -1,4 +1,4 @@
-Web Application Name: Residential Household Bill Allocation System
+Web Application Name: splitgorithm
 
 Group member name - Student Numbers:
 Moshekwa Matthews Malatji - 1387556
