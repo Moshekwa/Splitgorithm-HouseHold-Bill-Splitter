@@ -1,0 +1,153 @@
+html, body{
+position: relative;
+background: #000030;;
+}
+
+header{
+background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6));
+height: 100vh;
+-webkit-background-size:cover;
+background-size: cover;
+background-position: center center;
+position: relative;
+}
+
+/* Content */
+.content {
+margin: auto;
+display: inline;
+margin: 0px 10px;
+}
+
+.split {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+}
+
+.split.left {
+    width: 50%;
+    left: 0;
+    background: #FFFFFF;
+}
+
+.split.right {
+    width: 50%;
+    right: 0;
+    background:#000030;
+}
+ 
+.bills {
+    width: 50%;
+    height: auto;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.text-left {
+    width: 90%;
+    position: absolute;
+    top: 25%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+}
+
+ .text-left .title {
+  font-size: 3vw;
+  color: #003366;
+  font-weight: 700;
+  font-family: 'sansserifexbflf-italic';
+  line-height: 1;
+  letter-spacing: 5px;
+}  
+
+.text-left .subtitle {
+  font-size: 1.8vw;
+  font-family: 'Times new roman';
+  font-weight: 700;
+  color: #000099
+;
+  line-height: 1;
+  letter-spacing: 1px;
+  margin-top: 19px;
+} 
+
+.paybills .button1 {
+  font-size: 2vw;
+  color:#002211;
+  border: #002211 solid 4px;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 50px;
+  width: 25%;
+  height: 10%;
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}  
+
+.button1:hover {
+  background-color: #000030;
+  color: white;
+}
+
+.text-right {
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -50%);
+}
+
+.text-right .welcome {
+  font-size: 3vw;
+  color: #fff;
+  font-weight: 600;
+  font-family: 'sansserifexbflf-italic';
+  line-height: 1;
+  letter-spacing: 5px;
+  margin-top: 13px;
+} 
+
+input{
+      width: 15vw;
+      height: 25px;
+      border: none; 
+      border: #fff solid 2px;
+      border-radius: 5px;
+} 
+.input {
+  font-size: 1.vw;
+  color: #fff;
+  font-family: 'sansserifexbflf-italic';
+  line-height: 0.5;
+  letter-spacing: 1px;
+}
+
+.sign-in .button2 {
+  width: auto;
+  font-size: 1.3vw;
+  color:#000030;
+  font-weight: 700;
+  border:  solid 1px;
+  padding: auto;
+  text-align: center;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 5px;
+  outline: none;
+  margin-top: 17px;
+}
+
+.button2:hover {
+  background-color: #000030;
+  color:#fff;
+}
+
