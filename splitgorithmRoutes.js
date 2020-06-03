@@ -5,7 +5,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/signUpPage', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'class', 'signUpPage.html'))
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithmPages', 'signUpPage.html'))
 })
 
 router.post('/api/signUpPage', function (req, res) {
