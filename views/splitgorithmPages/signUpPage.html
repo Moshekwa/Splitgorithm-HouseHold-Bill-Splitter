@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Household Member Sign In</title>
+    <link rel="stylesheet" href="/cdn/css/welcomepage.css" >
+</head>
+
+<body>
+    <header>
+        <!-- Content -->
+        <div class="content">
+            <div class="split left">
+                <div class="text-left">
+                    <h1 class="title">Create an Account with SPLITGORITHM App</h1>
+                </div>
+                <div class="paybills">
+                    <img src="/cdn/images/bills.png" alt="" class="bills">
+                </div>
+            </div>
+            <div class="split right">
+                <div class="text-right">
+                    <h1 class="welcome">Please Fill In The Form To Sign Up</h1>
+                    <form action="/splitgorithmPages/api/signUpPage" method="post">
+                    <div><label for="MemberName" style="color: #C0C0C0">Name:</label></div>
+                    <div><input type="text" id="membername" name="name"></div>
+                    <div><label for="MemberUserName" style="color: #C0C0C0">Username:</label></div>
+                    <div><input type="text" id="memberUserName" name="username"></div>
+                    <div><label for="MemberEmail" style="color: #C0C0C0">Email:</label></div>
+                    <div><input type="text" id="memberemail" name="email"></div>
+                    <div><label for="MemberPassword" style="color: #C0C0C0">Password:</label></div>
+                    <div><input type="text" id="memberpassword" name="password"></div>
+
+                    <div class="button">
+                        <button type="submit">Sign Up</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
