@@ -29,13 +29,15 @@
                 <div class="text-right">
                     <h1 class="welcome">Welcome back</h1>
                     <div class="input">
-                        <h2>Username</h2>
-                        <input type="text" placeholder="Enter your Username"><br>
-                        <h3>Password</h3>
-                        <input type="text" placeholder="Enter your Password">
-                    </div>
-                    <div class="sign-in">
-                        <button class="button2">Sign in</button>
+                        <form action="/splitgorithmPages/api/welcome" method="POST">
+                            <label for="Username">Username</label><br/><br/>
+                            <input type="text" name="username" placeholder="Enter your Username"><br/><br/>
+                            <label for="Password">Password</label><br/><br/>
+                            <input type="text" name="password" placeholder="Enter your Password">
+                            <div class="sign-in">
+                                <button type="submit" class="button2" >Sign in</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
