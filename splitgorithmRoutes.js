@@ -29,4 +29,19 @@ router.post('/api/signUpPage', function (req, res) {
   } else res.redirect(req.baseUrl + '/signUpPage')
 })
 
+router.get('/welcome', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithmPages', 'welcome.html'))
+})
+
+router.post('/api/welcome', function (req, res) {
+  console.log('Signing in the following member:', req.body.username)
+  const index = members.getMembers().findIndex(function (elem) {
+    return elem.username === req.body.username &&
+           elem.password === req.body.password
+  })
+
+  if (index >= 0) {
+    res.redirect(req.baseUrl + '/homepage')
+  } else res.redirect(req.baseUrl + '/welcome')
+})
 module.exports = router
