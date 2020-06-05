@@ -7,15 +7,15 @@ const router = express.Router()
 // members in a house hold
 const members = require('./modules/members.js')
 
-router.get('/signUpPage', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithmPages', 'signUpPage.html'))
+router.get('/signup', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
 })
 
 router.get('/homepage', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithmPages', 'homepage.html'))
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
 })
 
-router.post('/api/signUpPage', function (req, res) {
+router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
     name: req.body.name,
@@ -26,11 +26,11 @@ router.post('/api/signUpPage', function (req, res) {
   if (memberObject.name !== '' && memberObject.surname !== '' && memberObject.email !== '' && memberObject.password !== '') {
     members.addMember(memberObject)
     res.redirect(req.baseUrl + '/homepage')
-  } else res.redirect(req.baseUrl + '/signUpPage')
+  } else res.redirect(req.baseUrl + '/signup')
 })
 
 router.get('/welcome', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithmPages', 'welcome.html'))
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'welcome.html'))
 })
 
 router.post('/api/welcome', function (req, res) {
