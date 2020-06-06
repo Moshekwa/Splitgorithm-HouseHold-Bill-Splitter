@@ -57,6 +57,10 @@ router.post('/api/addexpense', function (req, res) {
   } else res.redirect(req.baseUrl + '/homepage')
 })
 
+router.get('/api/expenseslist', function (req, res) {
+  res.json(expenses.getExpenses()) // Respond with JSON
+})
+
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
