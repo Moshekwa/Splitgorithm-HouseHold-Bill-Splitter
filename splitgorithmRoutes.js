@@ -6,6 +6,8 @@ const router = express.Router()
 
 // members in a house hold
 const members = require('./modules/members.js')
+// expenses list
+const expenses = require('./modules/expenses.js')
 
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
@@ -40,8 +42,19 @@ router.get('/api/list', function (req, res) {
     delete element.password
   }) // Remove Password from displaying
 
-  // res.json(memberList)
   res.json(members.getMembers()) // Respond with JSON
+})
+
+router.post('/api/addexpense', function (req, res) {
+  console.log('Adding the following Expense:', req.body.name)
+  const ExpenseObject = {
+    expensename: req.body.name,
+    cost: req.body.amount
+  }
+  if (ExpenseObject.name !== '' && ExpenseObject.cost !== 0) {
+    expenses.addExpense(ExpenseObject)
+    res.redirect(req.baseUrl + '/expense')
+  } else res.redirect(req.baseUrl + '/homepage')
 })
 
 router.post('/api/signup', function (req, res) {

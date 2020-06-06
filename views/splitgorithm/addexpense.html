@@ -23,13 +23,13 @@
             <div class="split right">
                 <div class="text-right">
                     <h1 class="welcome">Fill in the entry to add an expense</h1>
-                    <form action="/splitgorithm/api/expense" method="post">
+                    <form action="/splitgorithm/api/addexpense" method="post">
                     <div><label for="ExpenseName" style="color: #C0C0C0">Expense Name:</label></div>
                     <div><input type="text" id="expensename" expensename="name"></div>
                     <div><label for="ExpenseCost" style="color: #C0C0C0">Amount:</label></div>
-                    <div><input type="number" id="expensecost" cost="Amount"></div>
+                    <div><input type="number" id="expensecost" name="amount"></div>
                     <div><label for="MemberBill" style="color: #C0C0C0">Member Responsible for Expense</label></div>
-                    <div><input type="text" id="membername" membername="name"></div>
+                    <div><input type="text" id="membername" name="name"></div>
                     <div class="button">
                         <button type="submit">Add & Allocate Expense</button>
                     </div>
