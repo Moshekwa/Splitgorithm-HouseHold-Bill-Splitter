@@ -1,0 +1,62 @@
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.side-bar {
+  position: fixed;
+  left: 0vw;
+  width: 13vw;
+  height: 100vw;
+  background: #042331;
+  /* transition: all .5s ease; */
+}
+
+.side-bar header {
+  font-size: 2vw;
+  color: white;
+  line-height: 7vw;
+  text-align: center;
+  background: #063146;
+  user-select: none;
+}
+
+section{
+  background: url(bg.jpeg) no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #042331;
+  height: 100vh;
+  margin-left: 300px;
+  transition: all .5s;
+} 
+
+.side-bar .button{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
+  display: block;
+  height: 3vw;
+  width: 13vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  border-top: 1px solid rgba(255,255,255,.1);
+  transition: .4s;
+}
+
+.button:hover {
+  background-color: rgb(169,169,169);
+}

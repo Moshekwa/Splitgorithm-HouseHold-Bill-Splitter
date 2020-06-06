@@ -15,6 +15,23 @@ router.get('/homepage', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
 })
 
+router.get('/members', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'members.html'))
+})
+
+router.get('/expenses', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'expenses.html'))
+})
+
+router.get('/payments', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
+})
+
+router.get('/about', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
+})
+
+
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {

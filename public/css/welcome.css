@@ -1,6 +1,6 @@
 html, body{
 position: relative;
-background: #000030;;
+background: #042331;;
 }
 
 header{
@@ -34,7 +34,7 @@ margin: 0px 10px;
 .split.right {
     width: 50%;
     right: 0;
-    background:#000030;
+    background:#042331;
 }
  
 .bills {
