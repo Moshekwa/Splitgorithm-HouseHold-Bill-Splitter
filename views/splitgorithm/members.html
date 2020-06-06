@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members</title>
+    <script src="/cdn/script/viewMembers.js"></script>
     <link rel="stylesheet" href="/cdn/css/homepage.css">
 </head>
 
@@ -15,11 +16,11 @@
             <button class="button" type="submit">Home</button><br>
         </div>
     </form>
-    <form action="/splitgorithm/members" method="GET">
+    <form action="/splitgorithm/api/list" method="GET">
         <div>
-            <button class="button" type="submit">View Members</button><br>
+        <button class="button" type="submit">View Members</button><br>
         </div>
-    </form>
+        </form>
     <form action="/splitgorithm/expenses" method="GET">
         <div>
             <button class="button" type="submit">View Expenses</button><br>
@@ -47,10 +48,13 @@
         <div class="content">
             <center>
                 <h1>You are in, Manage Your Expenses</h1>
-                <p>This is where data goes for <b>Members</b> infor</p>
+                <p>This is where data goes for <b>Members</b></p>
             </center>
         </div>
     </section>
+    <div>
+        <ol id="membersList"></ol>
+    </div>
 </body>
 
 </html>
