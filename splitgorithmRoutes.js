@@ -31,6 +31,10 @@ router.get('/about', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
 })
 
+router.get('/addexpense', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'addexpense.html'))
+})
+
 router.get('/api/list', function (req, res) {
   members.getMembers().forEach(function (element) {
     delete element.password
