@@ -1,7 +1,7 @@
 {
   "name": "mods",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web Application Name: splitgorithm",
   "main": "index.js",
   "scripts": {
     "test": "jest",
@@ -15,5 +15,16 @@
   },
   "devDependencies": {
     "jest": "^26.0.1"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/witseie-elen4010/2020-006-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/witseie-elen4010/2020-006-project/issues"
+  },
+  "homepage": "https://github.com/witseie-elen4010/2020-006-project#readme"
 }
