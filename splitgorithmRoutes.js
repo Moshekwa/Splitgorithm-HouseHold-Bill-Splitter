@@ -53,7 +53,7 @@ router.post('/api/addexpense', function (req, res) {
   }
   if (ExpenseObject.name !== '' && ExpenseObject.cost !== 0) {
     expenses.addExpense(ExpenseObject)
-    res.redirect(req.baseUrl + '/expense')
+    res.redirect(req.baseUrl + '/expenses')
   } else res.redirect(req.baseUrl + '/homepage')
 })
 
