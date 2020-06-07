@@ -7,6 +7,9 @@ const router = express.Router()
 // members in a house hold
 const members = require('./modules/members.js')
 
+// Expenses list for the household
+const expenses = require('./modules/expenses.js')
+
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
 })
