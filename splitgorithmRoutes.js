@@ -31,7 +31,6 @@ router.get('/about', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
 })
 
-
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
@@ -61,4 +60,5 @@ router.post('/api/welcome', function (req, res) {
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/welcome')
 })
+
 module.exports = router
