@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Members</title>
+    <script src="/cdn/script/viewMembers.js"></script>
     <link rel="stylesheet" href="/cdn/css/homepage.css">
 </head>
 
@@ -46,11 +47,30 @@
     <section>
         <div class="content">
             <center>
-                <h1>You are in, Manage Your Expenses</h1>
-                <p>This is where data goes for <b>Members</b> infor</p>
-            </center>
+                <h1>Manage Household Members</h1>
+            <p>Please Click On the Following Button to View Members</p>             
+            <div class="btn-group" style="width:100%">
+            <button type="button" id="addButton1" style="width:10%" >View members
+            </button></div>
+            <form action="/splitgorithm/members" method="GET">
+                <div>
+                    <p>Click here to add new member</p>
+                    <button class="button" type="submit">Add Member</button><br>
+                </div>
+            </form>
+            <form action="/splitgorithm/members" method="GET">
+                <div>
+                    <p>Click here to delete a member</p>
+                    <button class="button" type="submit">Evict Member</button><br>
+                </div>
+            </form>
+            <div> 
+               <ol id="membersList"></ol> 
+            </div>         
         </div>
+    </center>
     </section>
+    
 </body>
 
 </html>

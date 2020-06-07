@@ -31,6 +31,13 @@ router.get('/about', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
 })
 
+router.get('/api/list', function (req, res) {
+  members.getMembers().forEach(function (element) {
+    delete element.password
+  }) // Remove Password from displaying
+
+  res.json(members.getMembers()) // Respond with JSON
+})
 
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
@@ -61,4 +68,5 @@ router.post('/api/welcome', function (req, res) {
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/welcome')
 })
+
 module.exports = router
