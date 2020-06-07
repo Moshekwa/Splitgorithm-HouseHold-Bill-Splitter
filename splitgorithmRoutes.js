@@ -7,7 +7,7 @@ const router = express.Router()
 // members in a house hold
 const members = require('./modules/members.js')
 // expense list for the household
-const members = require('./modules/members.js')
+const expenses = require('./modules/expenses.js')
 
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
@@ -38,7 +38,7 @@ router.get('/api/list', function (req, res) {
 })
 
 router.get('/api/expenselist', function (req, res) {
-  res.json(members.getMembers()) // Respond with JSON
+  res.json(expenses.getExpenses()) // Respond with JSON
 })
 
 router.post('/api/signup', function (req, res) {

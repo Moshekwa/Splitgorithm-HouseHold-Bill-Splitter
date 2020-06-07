@@ -1,7 +1,7 @@
 'use strict'
 
 // Expense List
-const Expenses = [
+const expenses = [
     {
         expenseCode: 'electricityBill',
         amount: 500
@@ -25,16 +25,16 @@ const Expenses = [
 
 module.exports{
     addExpense: function (expense) {
-        Expenses.push(expense)
+        expenses.push(expense)
       },
       isEmpty: function () {
-        if (Expenses.length === 0) return true
+        if (expenses.length === 0) return true
         else return false
       },
       getExpense: function (index) {
-        return Expenses[index.expenseCode]
+        return expenses[index.expenseCode]
       },
       getExpenseList: function () {
-        return Expenses
+        return expenses
       }
 }
