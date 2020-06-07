@@ -64,12 +64,21 @@
                     <p>Click here to delete a member</p>
                     <button class="button" type="submit">Evict Member</button><br>
                 </div>
-            </form>
+            </form> </center>
             <div> 
                <ol id="membersList"></ol> 
             </div>         
         </div>
-    </center>
+   
+    <center><form action="/splitgorithm/api/group" method="post">
+        <div><label for="GroupName">Group Name:</label></div>
+        <div><input type="text" id="groupname" name="name"></div>
+        <div><label for="MemberOne">Enter a number of member you want to add</label></div>
+        <div><input type="text" id="memberone" name="member"></div>
+        <div class="button">
+            <button type="submit">add member to group</button>
+        </div>
+    </form></center>
     <center>
         <div class="btn-group" style="width:100%">
             <button type="button" id="addButton2" style="width:10%" >Click here to see groups</button>
