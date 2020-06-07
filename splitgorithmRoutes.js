@@ -58,6 +58,7 @@ router.post('/api/group', function (req, res) {
     groups.addGroup(myGroup)
   }
   res.redirect(req.baseUrl + '/members')
+})
 
 router.get('/api/expenselist', function (req, res) {
   res.json(expenses.getExpenseList()) // Respond with JSON
