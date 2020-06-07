@@ -10,16 +10,16 @@ fetch('/splitgorithm/api/expenselist') // Returns a Promise for the GET request
     // Display the JSON data appropriately
     // Retrieve the Members List outer element
     const button = document.getElementById('addexpense')
-    const membersList = document.getElementById('expenselist')
+    const expenseList = document.getElementById('expenselist')
     // Iterate through all housemembers
     button.addEventListener('click', function () {
-      data.forEach(function (housemate) {
+      data.forEach(function (expense) {
       // Create a new list entry
         const li = document.createElement('LI')
-        const liText = document.createTextNode(housemate.name)
+        const liText = document.createTextNode(expense.expenseCode)
         // Append list text to list item and list item to list
         li.appendChild(liText)
-        membersList.appendChild(li)
+        expenseList.appendChild(li)
       })
     })
   })

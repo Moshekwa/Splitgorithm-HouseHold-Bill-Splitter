@@ -38,7 +38,7 @@ router.get('/api/list', function (req, res) {
 })
 
 router.get('/api/expenselist', function (req, res) {
-  res.json(expenses.getExpenses()) // Respond with JSON
+  res.json(expenses.getExpenseList()) // Respond with JSON
 })
 
 router.post('/api/signup', function (req, res) {
