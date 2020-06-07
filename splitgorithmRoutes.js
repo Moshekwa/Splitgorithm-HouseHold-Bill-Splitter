@@ -6,6 +6,8 @@ const router = express.Router()
 
 // members in a house hold
 const members = require('./modules/members.js')
+// expense list for the household
+const expenses = require('./modules/expenses.js')
 
 // household groups
 const groups = require('./modules/groups.js')
@@ -56,6 +58,9 @@ router.post('/api/group', function (req, res) {
     groups.addGroup(myGroup)
   }
   res.redirect(req.baseUrl + '/members')
+
+router.get('/api/expenselist', function (req, res) {
+  res.json(expenses.getExpenseList()) // Respond with JSON
 })
 
 router.post('/api/signup', function (req, res) {

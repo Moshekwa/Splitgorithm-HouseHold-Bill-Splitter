@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expenses</title>
+    <script src="/cdn/script/viewExpenses.js"></script>
     <link rel="stylesheet" href="/cdn/css/homepage.css">
 </head>
 
@@ -50,11 +51,6 @@
             </center>
         </div>
     <div>  
-        <form action="/splitgorithm/expenses" method="GET">
-        <div>
-            <p>Click here to view expenses</p>
-            <button class="button" type="submit">View Expenses</button><br>
-        </div>
     </form>
     <form action="/splitgorithm/expenses" method="GET">
         <div>
@@ -62,27 +58,13 @@
             <button class="button" type="submit">Add Expense</button><br>
         </div>
     </form>
-    </div>
-    </section>
-</body>
-
-</html>
-
-
-    <form action="/splitgorithm/welcome" method="GET">
-        <div>
-            <button class="button" type="submit">Sign Out</button>
-        </div>
-    </form>
-</div>
-
-<body>
-    <section>
-        <div class="content">
-            <center>
-                <h1>Manage Expenses</h1>
-            </center>
-        </div>
+      <p>Click here to view expenses</p>             
+        <div class="btn-group" style="width:100%">
+        <button type="button" id="addexpense" style="width:10%" >View Expenses
+        </button></div>
+        <div> 
+            <ol id="expenselist"></ol> 
+         </div>         
     </section>
 </body>
 
