@@ -32,10 +32,6 @@ router.get('/about', function (req, res) {
 })
 
 router.get('/api/list', function (req, res) {
-  members.getMembers().forEach(function (element) {
-    delete element.password
-  }) // Remove Password from displaying
-
   res.json(members.getMembers()) // Respond with JSON
 })
 
