@@ -9,6 +9,9 @@ const members = require('./modules/members.js')
 // expense list for the household
 const expenses = require('./modules/expenses.js')
 
+// household groups
+const groups = require('./modules/groups.js')
+
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
 })
@@ -37,6 +40,25 @@ router.get('/api/list', function (req, res) {
   res.json(members.getMembers()) // Respond with JSON
 })
 
+router.get('/api/groups', function (req, res) {
+  res.json(groups.getGroups()) // Respond with JSON
+})
+
+router.post('/api/group', function (req, res) {
+  console.log(`Adding ${req.body.member}$ on group ${req.body.name}$`)
+  const found = groups.isExisting(req.body.name) // this will be the index where a group is found or false if it doesn't exist
+  if (typeof (found) === 'number') {
+    groups.getParticularGroup(found).groupMembers.push(members.getMember(req.body.member - 1))
+  } else if (found === null) {
+    const myGroup = {
+      groupMembers: [members.getMember(req.body.member - 1)]
+    }
+    myGroup[req.body.name] = 'my Group' // the key is the group name, this key is used to add members
+    // on existing groups
+    groups.addGroup(myGroup)
+  }
+  res.redirect(req.baseUrl + '/members')
+
 router.get('/api/expenselist', function (req, res) {
   res.json(expenses.getExpenseList()) // Respond with JSON
 })
@@ -49,7 +71,7 @@ router.post('/api/signup', function (req, res) {
     email: req.body.email,
     password: req.body.password
   }
-  if (memberObject.name !== '' && memberObject.surname !== '' && memberObject.email !== '' && memberObject.password !== '') {
+  if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' && memberObject.password !== '') {
     members.addMember(memberObject)
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/signup')
