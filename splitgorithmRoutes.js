@@ -113,14 +113,32 @@ router.get('/welcome', function (req, res) {
 
 router.post('/api/welcome', function (req, res) {
   console.log('Signing in the following member:', req.body.username)
-  const index = members.getMembers().findIndex(function (elem) {
-    return elem.username === req.body.username &&
-           elem.password === req.body.password
-  })
-
-  if (index >= 0) {
-    res.redirect(req.baseUrl + '/homepage')
-  } else res.redirect(req.baseUrl + '/welcome')
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.username
+      })
+      if (index >= 0) {
+        // Load hash from your password DB.
+        console.log(bcrypt.compareSync(req.body.password, result.recordset[index].password))
+        if (bcrypt.compareSync(req.body.password, result.recordset[index].password) === true) {
+          res.redirect(req.baseUrl + '/homepage')
+        } else res.redirect(req.baseUrl + '/welcome')
+      } else res.redirect(req.baseUrl + '/welcome')
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
-
 module.exports = router
