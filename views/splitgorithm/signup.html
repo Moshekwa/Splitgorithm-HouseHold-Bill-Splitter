@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Household Member Sign In</title>
     <link rel="stylesheet" href="/cdn/css/welcome.css" >
+    <script src="/cdn/script/welcome.js"></script>
 </head>
 
 <body>
@@ -31,7 +32,8 @@
                     <div><label for="MemberEmail" style="color: #C0C0C0">Email:</label></div>
                     <div><input type="text" id="memberemail" name="email"></div>
                     <div><label for="MemberPassword" style="color: #C0C0C0">Password:</label></div>
-                    <div><input type="text" id="memberpassword" name="password"></div>
+                    <div><input type="password" id="password" name="password">
+                    <button class="ui-component__password-field__show-hide" type="button" onclick="toggle(this);">Show</button></div>
                     <div class="button">
                         <button type="submit">Sign Up</button>
                     </div>
