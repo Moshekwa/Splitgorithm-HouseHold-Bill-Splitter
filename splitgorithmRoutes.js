@@ -5,6 +5,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
+const nodemailer = require('nodemailer')
 
 // members in a house hold
 const members = require('./modules/members.js')
@@ -79,6 +80,32 @@ router.post('/api/signup', function (req, res) {
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/signup')
 
+  // Welcome users with an email
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD
+    }
+  })
+
+  const mailOptions = {
+    from: 'mysplitgorithm@gmail.com',
+    to: members.getMember(members.getMembers().length - 1).email,
+    subject: 'Welcome to Splitgorithm',
+    text: 'We are within',
+    html: '<center><h1>Greetings,</h1><br/><br/><p> Welcome to Splitgorithm app. <br/>Your sign-up comes with services<br/> offered by Splitgorithm,<br/><br/><br/></center> Splitgorithm Team<br/>Splitgorithm PTY LTD</p>'
+  }
+
+  transporter.sendMail(mailOptions, (err, data) =>{
+    if (err) {
+      console.log('Error has occured: ', err)
+    } else {
+        console.log('Email sent successefully')
+    }
+  })
+
+  // Connect to db
   db.sql.connect(db.getConfig())
     .then(() => {
       console.log('connected')
@@ -141,4 +168,5 @@ router.post('/api/welcome', function (req, res) {
       })
     })
 })
+
 module.exports = router
