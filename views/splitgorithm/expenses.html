@@ -52,14 +52,17 @@
         </div>
     <div>  
     </form>
-    <form action="/splitgorithm/expenses" method="GET">
-        <div>
-            <p>Click here to view expenses</p>
-            <button class="button" type="submit">Add Expense</button><br>
+    <form action="/splitgorithm/api/expenses" method="POST">
+        <label for="expensename">Expense name</label><br/>
+        <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
+        <label for="Amount">Cost</label><br/>
+        <input type="text" name="cost" placeholder="Enter cost of expense"><br/>
+        <label for="Payer">Payer</label><br/>
+        <input type="text" name="payer" placeholder="Enter your name">
+        <div class="post-expense">
+            <button type="submit" class="button3" >Post Expense</button>
         </div>
-    </form>
-      <p>Click here to view expenses</p>             
-        <div class="btn-group" style="width:100%">
+    </form>  
         <button type="button" id="addexpense" style="width:10%" >View Expenses
         </button></div>
         <div> 
