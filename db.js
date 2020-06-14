@@ -1,5 +1,7 @@
 'use strict'
 const mssql = require('mssql')
+const env = require('dotenv').config();
+
 
 // Make sure this is private to this module
 const config = {
@@ -8,6 +10,7 @@ const config = {
   // Put login details in env. variables for security
   user: process.env.db_username,
   password: process.env.db_password,
+
   port: 1433,
   // Required for Azure
   options: {
