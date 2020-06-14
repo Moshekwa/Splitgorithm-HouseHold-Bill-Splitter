@@ -24,7 +24,7 @@ describe('Successfully adding an expense', () => {
   })
 })
 
-describe('Getting a paticular expense from the list', () => {
+describe('Getting a particular expense from the list', () => {
   test('getting expense 1', () => {
     const obtainedExpense = expensesList.getExpense(0)
     expect(obtainedExpense.name).toBe('Groceries') // expense has already been defined in the previous test
