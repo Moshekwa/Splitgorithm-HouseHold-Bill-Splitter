@@ -130,6 +130,12 @@ router.get('/api/expenselist', function (req, res) {
     .then(result => {
       res.json(result.recordset) // Respond with JSON
     })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 router.post('/api/signup', function (req, res) {
