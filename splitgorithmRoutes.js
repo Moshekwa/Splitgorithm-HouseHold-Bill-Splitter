@@ -128,11 +128,8 @@ router.get('/api/expenselist', function (req, res) {
     })
   // Processing the response
     .then(result => {
-      // const index = result.recordset.findIndex(function (elem) {
-      //  return elem.username === req.body.username
+      res.json(result.recordset) // Respond with JSON
     })
-
-  // res.json(expenses.getExpenseList()) // Respond with JSON
 })
 
 router.post('/api/signup', function (req, res) {
