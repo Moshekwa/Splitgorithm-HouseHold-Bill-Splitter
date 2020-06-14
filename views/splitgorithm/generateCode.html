@@ -15,21 +15,12 @@
 <body>
     <div class="container">
         <h1 class="brand"><span>Splitgorithm's</span> World</h1>
-        <div class="wrapper">      
+        <div class="wrapper">
             <div class="contact">
-                <h3 id="status">Change your user password</h3>
-                <form method="POST">
+                <h3 id="status">Enter your your account E-mail address</h3>
+                <form action="/splitgorithm/api/resetPassword" method="GET">
                     <p class="full">
-                        <label>Enter Emailed G-Code</label>
-                        <input type="text" name="g-code" id="g-code" placeholder="Enter G-Code">
-                    </p>
-                    <p class="full">
-                        <label>New password</label>
-                        <input type="password" name="password" id="password" placeholder="Enter new password">
-                    </p>
-                    <p class="full">
-                        <label>Confirm password</label>
-                        <input type="password" name="Cpassword" id="Cpassword" placeholder="Confirm password">
+                        <input type="text" id="memberemail" name="email" placeholder="Enter email address">
                     </p>
                     <p class="full">
                         <button type="submit" id="send">Send</button>
