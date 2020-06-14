@@ -39,12 +39,8 @@ router.get('/about', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
 })
 
-router.get('/api/resetPassword', function (req, res) {
+router.get('/resetPassword', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
-})
-
-router.get('/api/generateCode', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'generateCode.html'))
 })
 
 router.get('/api/list', function (req, res) {
@@ -102,7 +98,12 @@ router.post('/api/signup', function (req, res) {
     to: members.getMember(members.getMembers().length - 1).email,
     subject: 'Welcome to Splitgorithm',
     text: 'We are within',
-    html: '<center><h1>Greetings,</h1><br/><br/><p> Welcome to Splitgorithm app. <br/>Your sign-up comes with services<br/> offered by Splitgorithm,<br/><br/><br/></center> Splitgorithm Team<br/>Splitgorithm PTY LTD</p>'
+    html: `<center><h1>Greetings, ${members.getMember(members.getMembers().length - 1).username}, </h1><br/><br/><p>
+    Welcome to Splitgorithm app. <br/>
+    Your sign-up comes with services<br/>
+    'offered by Splitgorithm,<br/><br/><br/></center> 
+    Splitgorithm Team<br/>
+    Splitgorithm PTY LTD</p>`
   }
 
   transporter.sendMail(mailOptions, (err, data) =>{
@@ -175,6 +176,91 @@ router.post('/api/welcome', function (req, res) {
         Error: err
       })
     })
+})
+
+//Generate and email G-Code.
+router.get('/generateCode', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'generateCode.html'))
+})
+
+router.post('/api/generateCode', (req, res) => {
+  console.log('Verifying user email')
+
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.username
+      })
+      console.log(result.recordset[index])
+      if (index >= 0) {
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: process.env.EMAIL,
+              pass: process.env.PASSWORD
+            }
+          })
+
+          const mailOptions = {
+            from: 'mysplitgorithm@gmail.com',
+            to: result.recordset[index].email,
+            subject: 'Welcome to Splitgorithm',
+            text: 'We are within',
+            html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
+                  Please use the following generated code <br/>
+                  to reset your password,<br/>
+                  Code: ${Math.random().toString(36).replace('0.', '') }<br/><br/><br/></center> 
+                  Splitgorithm Team<br/>
+                  Splitgorithm PTY LTD</p>`
+          }
+
+          transporter.sendMail(mailOptions, (err, data) => {
+            if (err) {
+              console.log('Error has occured: ', err)
+            } else {
+              console.log('Email sent successefully')
+            }
+          })
+        res.redirect(req.baseUrl + '/resetPassword')
+        } else {
+          res.redirect(req.baseUrl + '/generateCode')
+        }
+    })
+})
+
+router.get('/resetPassword', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
+})
+
+router.post('/api/resetPassword', (req, res) => {
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+    // Processing the response
+       .then(result => {
+         const index = result.recordset.findIndex(function (elem) {
+           return elem.username === req.body.username
+         })
+         console.log(result.recordset[index])
+         if (index !== 0) {           
+           res.redirect(req.baseUrl + '/homepage')
+         } else {
+           res.redirect(req.baseUrl + '/resetPassword')
+         }
+       })
 })
 
 module.exports = router

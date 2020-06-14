@@ -17,10 +17,10 @@
         <h1 class="brand"><span>Splitgorithm's</span> World</h1>
         <div class="wrapper">
             <div class="contact">
-                <h3 id="status">Enter your your account E-mail address</h3>
-                <form action="/splitgorithm/api/resetPassword" method="GET">
+                <h3 id="status">Enter your account username</h3>
+                <form action="/splitgorithm/api/generateCode" method="POST">
                     <p class="full">
-                        <input type="text" id="memberemail" name="email" placeholder="Enter email address">
+                        <input type="text" id="username" name="username" placeholder="Enter username">
                     </p>
                     <p class="full">
                         <button type="submit" id="send">Send</button>
@@ -30,5 +30,4 @@
         </div>
     </div>
 </body>
-
 </html>
