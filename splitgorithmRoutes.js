@@ -95,25 +95,6 @@ router.post('/api/expenses', function (req, res) {
     .catch(err => {
       console.log(err)
     })
-
-  // Make a query to the database
-  db.pools
-  // Run query
-    .then((pool) => {
-      return pool.request()
-      // perfoming a query
-        .query('select * from HouseholdExpenses')
-    })
-  // Processing the response
-    .then(result => {
-      console.log(result.recordset)
-    })
-  // If there's an error, return that with some description
-    .catch(err => {
-      res.send({
-        Error: err
-      })
-    })
 })
 
 router.get('/api/expenselist', function (req, res) {
@@ -128,7 +109,8 @@ router.get('/api/expenselist', function (req, res) {
     })
   // Processing the response
     .then(result => {
-      res.json(result.recordset) // Respond with JSON
+      console.log(result.recordset)
+      // res.json(result.recordset) // Respond with JSON
     })
   // If there's an error, return that with some description
     .catch(err => {
