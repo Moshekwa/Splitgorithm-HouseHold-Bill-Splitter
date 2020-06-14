@@ -65,7 +65,58 @@ router.post('/api/group', function (req, res) {
 router.get('/api/expenselist', function (req, res) {
   res.json(expenses.getExpenseList()) // Respond with JSON
 })
+router.post('/api/expenses', function (req, res) {
+  console.log('Posting the following expense: ', req.body.expensename)
+  const expenseObject = {
+    name: req.body.expensename,
+    cost: req.body.cost,
+    payer: req.body.payer
+  }
+  if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.payer !== '') {
+    expenses.addExpense(expenseObject)
+    res.redirect(req.baseUrl + '/homepage')
+  } else res.redirect(req.baseUrl + '/expense')
+  db.sql.connect(db.getConfig())
+    .then(() => {
+      console.log('connected')
 
+      const table = new db.sql.Table('HouseholdExpenses')
+      table.create = true
+      table.columns.add('Name', db.sql.VarChar(128), { nullable: false, primary: true })
+      table.columns.add('Amount', db.sql.VarChar(128), { nullable: false })
+      table.columns.add('Payer', db.sql.VarChar(128), { nullable: false })
+
+      // adding expense to the table
+      table.rows.add(expenses.getExpense(expenses.getExpenseList().length - 1).name, expenses.getExpense(expenses.getExpenseList().length - 1).cost, expenses.getExpense(expenses.getExpenseList().length - 1).payer)
+      const request = new db.sql.Request()
+      return request.bulk(table)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from HouseholdExpenses')
+    })
+  // Processing the response
+    .then(result => {
+      console.log(result.recordset)
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
