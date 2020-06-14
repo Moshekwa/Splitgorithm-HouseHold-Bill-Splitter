@@ -63,9 +63,6 @@ router.post('/api/group', function (req, res) {
   res.redirect(req.baseUrl + '/members')
 })
 
-router.get('/api/expenselist', function (req, res) {
-  res.json(expenses.getExpenseList()) // Respond with JSON
-})
 router.post('/api/expenses', function (req, res) {
   console.log('Posting the following expense: ', req.body.expensename)
   const expenseObject = {
@@ -118,6 +115,27 @@ router.post('/api/expenses', function (req, res) {
       })
     })
 })
+
+router.get('/api/expenselist', function (req, res) {
+  console.log('Returning a list expenses from data base')
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from HouseholdExpenses')
+    })
+  // Processing the response
+    .then(result => {
+      // const index = result.recordset.findIndex(function (elem) {
+      //  return elem.username === req.body.username
+    })
+
+
+  // res.json(expenses.getExpenseList()) // Respond with JSON
+})
+
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
@@ -148,11 +166,11 @@ router.post('/api/signup', function (req, res) {
     html: '<center><h1>Greetings,</h1><br/><br/><p> Welcome to Splitgorithm app. <br/>Your sign-up comes with services<br/> offered by Splitgorithm,<br/><br/><br/></center> Splitgorithm Team<br/>Splitgorithm PTY LTD</p>'
   }
 
-  transporter.sendMail(mailOptions, (err, data) =>{
+  transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       console.log('Error has occured: ', err)
     } else {
-        console.log('Email sent successefully')
+      console.log('Email sent successefully')
     }
   })
 
