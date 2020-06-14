@@ -109,7 +109,7 @@ router.get('/api/expenselist', function (req, res) {
     })
   // Processing the response
     .then(result => {
-      res.json(result.recordset) // Respond with JSON
+      res.json(result.recordset)
     })
   // If there's an error, return that with some description
     .catch(err => {
