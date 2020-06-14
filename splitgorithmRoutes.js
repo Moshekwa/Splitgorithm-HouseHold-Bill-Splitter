@@ -132,7 +132,6 @@ router.get('/api/expenselist', function (req, res) {
       //  return elem.username === req.body.username
     })
 
-
   // res.json(expenses.getExpenseList()) // Respond with JSON
 })
 
