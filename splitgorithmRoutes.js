@@ -39,6 +39,10 @@ router.get('/about', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'about.html'))
 })
 
+router.get('/api/resetPassword', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
+})
+
 router.get('/api/list', function (req, res) {
   res.json(members.getMembers()) // Respond with JSON
 })
