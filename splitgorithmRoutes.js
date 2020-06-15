@@ -65,6 +65,7 @@ router.post('/api/group', function (req, res) {
 
 router.get('/api/expenselist', function (req, res) {
   // Make a query to the database
+  console.log('Returning The list of Expenses from the database')
   db.pools
     // Run query
     .then((pool) => {
