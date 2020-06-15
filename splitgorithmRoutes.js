@@ -64,7 +64,25 @@ router.post('/api/group', function (req, res) {
 })
 
 router.get('/api/expenselist', function (req, res) {
-  res.json(expenses.getExpenseList()) // Respond with JSON
+  // Make a query to the database
+  console.log('Returning The list of Expenses from the database')
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from HouseholdExpenses')
+    })
+    // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 router.post('/api/expenses', function (req, res) {
   console.log('Posting the following expense: ', req.body.expensename)
@@ -98,25 +116,6 @@ router.post('/api/expenses', function (req, res) {
     .catch(err => {
       console.log(err)
     })
-
-  // Make a query to the database
-  db.pools
-  // Run query
-    .then((pool) => {
-      return pool.request()
-      // perfoming a query
-        .query('select * from HouseholdExpenses')
-    })
-  // Processing the response
-    .then(result => {
-      console.log(result.recordset)
-    })
-  // If there's an error, return that with some description
-    .catch(err => {
-      res.send({
-        Error: err
-      })
-    })
 })
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
@@ -148,11 +147,11 @@ router.post('/api/signup', function (req, res) {
     html: '<center><h1>Greetings,</h1><br/><br/><p> Welcome to Splitgorithm app. <br/>Your sign-up comes with services<br/> offered by Splitgorithm,<br/><br/><br/></center> Splitgorithm Team<br/>Splitgorithm PTY LTD</p>'
   }
 
-  transporter.sendMail(mailOptions, (err, data) =>{
+  transporter.sendMail(mailOptions, (err, data) => {
     if (err) {
       console.log('Error has occured: ', err)
     } else {
-        console.log('Email sent successefully')
+      console.log('Email sent successefully')
     }
   })
 
