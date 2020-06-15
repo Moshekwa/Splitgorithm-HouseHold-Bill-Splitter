@@ -199,7 +199,6 @@ router.post('/api/generateCode', (req, res) => {
       const index = result.recordset.findIndex(function (elem) {
         return elem.username === req.body.username
       })
-      console.log(result.recordset[index])
       if (index >= 0) {
           const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -215,7 +214,7 @@ router.post('/api/generateCode', (req, res) => {
             subject: 'Welcome to Splitgorithm',
             text: 'We are within',
             html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
-                  Please use the following generated code <br/>
+                  Please use the following link <br/>
                   to reset your password,<br/>
                   Code: ${Math.random().toString(36).replace('0.', '') }<br/><br/><br/></center> 
                   Splitgorithm Team<br/>
@@ -254,9 +253,17 @@ router.post('/api/resetPassword', (req, res) => {
          const index = result.recordset.findIndex(function (elem) {
            return elem.username === req.body.username
          })
-         console.log(result.recordset[index])
-         if (index !== 0) {           
-           res.redirect(req.baseUrl + '/homepage')
+         
+         if (index !== 0) {  
+           db.pools
+             // Run query
+             .then((pool) => {
+               const salt = bcrypt.genSaltSync(10)
+               return pool.request()
+                 // perfoming a query
+                 .query(`UPDATE SplitgorithmUsers SET password='${bcrypt.hashSync(req.body.password, salt)}' where username='result.recordset[index].username'`)
+             })  
+           res.redirect(req.baseUrl + '/welcome')
          } else {
            res.redirect(req.baseUrl + '/resetPassword')
          }
