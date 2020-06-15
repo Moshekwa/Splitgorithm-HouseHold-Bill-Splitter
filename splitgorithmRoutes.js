@@ -64,7 +64,24 @@ router.post('/api/group', function (req, res) {
 })
 
 router.get('/api/expenselist', function (req, res) {
-  res.json(expenses.getExpenseList()) // Respond with JSON
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from HouseholdExpenses')
+    })
+    // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 router.post('/api/expenses', function (req, res) {
   console.log('Posting the following expense: ', req.body.expensename)
