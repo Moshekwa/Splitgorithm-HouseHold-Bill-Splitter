@@ -34,6 +34,9 @@ router.get('/expenses', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'expenses.html'))
 })
 
+router.get('/profile', function (req, res) {
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'profile.html'))
+})
 router.get('/payments', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
 })
