@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const nodemailer = require('nodemailer')
 
-const G_code = Math.random().toString(36).replace('0.', '');
+const G_code = Math.random().toString(36).replace('0.', '')
 
 // members in a house hold
 const members = require('./modules/members.js')
@@ -90,6 +90,57 @@ router.get('/api/expenselist', function (req, res) {
         Error: err
       })
     })
+})
+let name = ''
+let Index = 0
+router.post('/api/profile', function (req, res) {
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.currentusername
+      })
+      Index = index
+      console.log(result.recordset)
+      name = result.recordset[index].name
+    })
+  if (Index >= 0) {
+    console.log('Updating the following profile: ', name)
+    if (req.body.newusername !== '') {
+      // Make a query to the database
+      db.pools
+        // Run query
+        .then((pool) => {
+          const dbrequest = pool.request()
+          dbrequest.input('usern', `${req.body.newusername}`)
+          dbrequest.input('user', `${name}`)
+          return dbrequest
+            // perfoming a query
+            .query('UPDATE SplitgorithmUsers SET username=@usern WHERE name=@user')
+        })
+    }
+    if (req.body.newemail !== '') {
+    // Make a query to the database
+      db.pools
+      // Run query
+        .then((pool) => {
+          const dbrequest = pool.request()
+          dbrequest.input('usern', `${req.body.newemail}`)
+          dbrequest.input('user', `${name}`)
+          return dbrequest
+          // perfoming a query
+            .query('UPDATE SplitgorithmUsers SET email=@usern WHERE name=@user')
+        })
+    }
+    res.redirect(req.baseUrl + '/profile')
+  }
 })
 router.post('/api/expenses', function (req, res) {
   console.log('Posting the following expense: ', req.body.expensename)
@@ -231,7 +282,7 @@ router.post('/api/welcome', function (req, res) {
     })
 })
 
-//Generate and email G-Code.
+// Generate and email G-Code.
 router.get('/generateCode', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'generateCode.html'))
 })
@@ -253,38 +304,38 @@ router.post('/api/generateCode', (req, res) => {
         return elem.username === req.body.username
       })
       if (index >= 0) {
-          const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: process.env.EMAIL,
-              pass: process.env.PASSWORD
-            }
-          })
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+          }
+        })
 
-          const mailOptions = {
-            from: 'mysplitgorithm@gmail.com',
-            to: result.recordset[index].email,
-            subject: 'Welcome to Splitgorithm',
-            text: 'We are within',
-            html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
+        const mailOptions = {
+          from: 'mysplitgorithm@gmail.com',
+          to: result.recordset[index].email,
+          subject: 'Welcome to Splitgorithm',
+          text: 'We are within',
+          html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
                   <h2>Please use the following link <br/>
                   to reset your password,<br/>
                   Like: ${G_code}<br/><br/><br/></center> 
                   Splitgorithm Team<br/>
                   Splitgorithm PTY LTD</p></h2>`
-          }
-
-          transporter.sendMail(mailOptions, (err, data) => {
-            if (err) {
-              console.log('Error has occured: ', err)
-            } else {
-              console.log('Email sent successefully')
-            }
-          })
-        res.redirect(req.baseUrl + '/resetPassword')
-        } else {
-          res.redirect(req.baseUrl + '/generateCode')
         }
+
+        transporter.sendMail(mailOptions, (err, data) => {
+          if (err) {
+            console.log('Error has occured: ', err)
+          } else {
+            console.log('Email sent successefully')
+          }
+        })
+        res.redirect(req.baseUrl + '/resetPassword')
+      } else {
+        res.redirect(req.baseUrl + '/generateCode')
+      }
     })
 })
 
@@ -299,15 +350,15 @@ router.post('/api/resetPassword', (req, res) => {
     // Run query
     .then((pool) => {
       const salt = bcrypt.genSaltSync(10)
-      const dbrequest =  pool.request()
+      const dbrequest = pool.request()
       // dbrequest.input('userp', bcrypt.hashSync(req.body.password, salt))
       dbrequest.input('userp', `${bcrypt.hashSync(req.body.password, salt)}`)
       dbrequest.input('nam', `${req.body.username}`)
-        // perfoming a query
-      if (G_code === req.body.gcode) { 
+      // perfoming a query
+      if (G_code === req.body.gcode) {
         return dbrequest
           .query('UPDATE SplitgorithmUsers SET password=@userp WHERE username=@nam')
-          }
+      }
     })
     .then(result => {
       // console.log(result.recordset)
