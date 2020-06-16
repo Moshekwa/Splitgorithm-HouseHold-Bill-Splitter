@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const nodemailer = require('nodemailer')
 
+const G_code = Math.random().toString(36).replace('0.', '');
+
 // members in a house hold
 const members = require('./modules/members.js')
 // expense list for the household
@@ -14,6 +16,7 @@ const expenses = require('./modules/expenses.js')
 
 // household groups
 const groups = require('./modules/groups.js')
+const { sql } = require('./db.js')
 
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
@@ -214,11 +217,11 @@ router.post('/api/generateCode', (req, res) => {
             subject: 'Welcome to Splitgorithm',
             text: 'We are within',
             html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
-                  Please use the following link <br/>
+                  <h2>Please use the following link <br/>
                   to reset your password,<br/>
-                  Code: ${Math.random().toString(36).replace('0.', '') }<br/><br/><br/></center> 
+                  Like: ${G_code}<br/><br/><br/></center> 
                   Splitgorithm Team<br/>
-                  Splitgorithm PTY LTD</p>`
+                  Splitgorithm PTY LTD</p></h2>`
           }
 
           transporter.sendMail(mailOptions, (err, data) => {
@@ -241,6 +244,8 @@ router.get('/resetPassword', (req, res) => {
 
 router.post('/api/resetPassword', (req, res) => {
   // Make a query to the database
+  let index = 0
+  let User = 0
   db.pools
     // Run query
     .then((pool) => {
@@ -249,25 +254,39 @@ router.post('/api/resetPassword', (req, res) => {
         .query('select * from SplitgorithmUsers')
     })
     // Processing the response
-       .then(result => {
-         const index = result.recordset.findIndex(function (elem) {
-           return elem.username === req.body.username
-         })
-         
-         if (index !== 0) {  
-           db.pools
-             // Run query
-             .then((pool) => {
-               const salt = bcrypt.genSaltSync(10)
-               return pool.request()
-                 // perfoming a query
-                 .query(`UPDATE SplitgorithmUsers SET password='${bcrypt.hashSync(req.body.password, salt)}' where username='result.recordset[index].username'`)
-             })  
-           res.redirect(req.baseUrl + '/welcome')
-         } else {
-           res.redirect(req.baseUrl + '/resetPassword')
-         }
+    .then(result => {
+       index = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.username
        })
+      User = result.recordset[index].username
+      })
+  if (index !== -1) { 
+  db.pools
+    // Run query
+    .then((pool) => {
+      const salt = bcrypt.genSaltSync(10)
+      return pool.request()
+        // perfoming a query
+      .query(`UPDATE SplitgorithmUsers SET password='${bcrypt.hashSync(req.body.password, salt)}' WHERE username='${User}'`)
+    })
+    .then(result => {
+      if (G_code === req.body.gcode) {
+        res.redirect(req.baseUrl + '/welcome')
+      } else {
+        res.redirect(req.baseUrl + '/resetPassword')
+      } 
+    })
+  } else {
+    res.redirect(req.baseUrl + '/resetPassword')
+  } 
+           
+
+    //         // }
+    //         // else {
+    //          res.redirect(req.baseUrl + '/resetPassword')
+    //          }
+    //      } 
+    //   //  })
 })
 
 module.exports = router
