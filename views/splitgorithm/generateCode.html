@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reset Your Password</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+    <link rel="stylesheet" href="/cdn/css/password-reset.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="brand"><span>Splitgorithm's</span> World</h1>
+        <div class="wrapper">
+            <div class="contact">
+                <h3 id="status">Enter your account username</h3>
+                <form action="/splitgorithm/api/generateCode" method="POST">
+                    <p class="full">
+                        <input type="text" id="username" name="username" placeholder="Enter username">
+                    </p>
+                    <p class="full">
+                        <button type="submit" id="send">Send</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
