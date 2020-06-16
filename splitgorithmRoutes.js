@@ -244,49 +244,25 @@ router.get('/resetPassword', (req, res) => {
 
 router.post('/api/resetPassword', (req, res) => {
   // Make a query to the database
-  let index = 0
-  let User = 0
-  db.pools
-    // Run query
-    .then((pool) => {
-      return pool.request()
-        // perfoming a query
-        .query('select * from SplitgorithmUsers')
-    })
-    // Processing the response
-    .then(result => {
-       index = result.recordset.findIndex(function (elem) {
-        return elem.username === req.body.username
-       })
-      User = result.recordset[index].username
-      })
-  if (index !== -1) { 
+
   db.pools
     // Run query
     .then((pool) => {
       const salt = bcrypt.genSaltSync(10)
-      return pool.request()
+      const dbrequest =  pool.request()
+      // dbrequest.input('userp', bcrypt.hashSync(req.body.password, salt))
+      dbrequest.input('userp', `${bcrypt.hashSync(req.body.password, salt)}`)
+      dbrequest.input('nam', `${req.body.username}`)
         // perfoming a query
-      .query(`UPDATE SplitgorithmUsers SET password='${bcrypt.hashSync(req.body.password, salt)}' WHERE username='${User}'`)
+      if (G_code === req.body.gcode) { 
+        return dbrequest
+          .query('UPDATE SplitgorithmUsers SET password=@userp WHERE username=@nam')
+          }
     })
     .then(result => {
-      if (G_code === req.body.gcode) {
-        res.redirect(req.baseUrl + '/welcome')
-      } else {
-        res.redirect(req.baseUrl + '/resetPassword')
-      } 
+      // console.log(result.recordset)
+      res.redirect(req.baseUrl + '/welcome')
     })
-  } else {
-    res.redirect(req.baseUrl + '/resetPassword')
-  } 
-           
-
-    //         // }
-    //         // else {
-    //          res.redirect(req.baseUrl + '/resetPassword')
-    //          }
-    //      } 
-    //   //  })
 })
 
 module.exports = router
