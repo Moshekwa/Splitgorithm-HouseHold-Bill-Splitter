@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expenses</title>
-    <script src="/cdn/script/viewExpenses.js"></script>
-    <link rel="stylesheet" href="/cdn/css/homepage.css">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/cdn/css/homepage.css">   
 </head>
 
 <div class="side-bar">
@@ -52,27 +51,25 @@
     <section>
         <div class="content">
             <center>
-                <h1>Manage Your Expenses</h1>
+                    <h1>Your profile</h1>
+                    <form action="/splitgorithm/api/profile" method="post">
+                    <div><label for="CurrentUsername">Current Username:</label></div>
+                    <div><input type="text" id="username" name="currentusername"></div>
+                    <div><label for="newUsername">New Username:</label></div>
+                    <div><input type="text" id="username" name="newusername"></div>
+                    <div><label for="MemberEmail" >Email:</label></div>
+                    <div><input type="text" id="memberemail" name="newemail"></div>
+                    <div class="button">
+                        <button type="submit">Update Profile</button>
+                    </div>
+                </form>
+                <button type="button" id="profile" style="width:10%" >View Profile
+                </button></div>
+                <div> 
+                    <ol id="Profile"></ol> 
+                 </div>   
             </center>
         </div>
-    <div>  
-    </form>
-    <form action="/splitgorithm/api/expenses" method="POST">
-        <label for="expensename">Expense name</label><br/>
-        <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
-        <label for="Amount">Cost</label><br/>
-        <input type="text" name="cost" placeholder="Enter cost of expense"><br/>
-        <label for="Payer">Payer</label><br/>
-        <input type="text" name="payer" placeholder="Enter your name">
-        <div class="post-expense">
-            <button type="submit" class="button3" >Post Expense</button>
-        </div>
-    </form>  
-        <button type="button" id="addexpense" style="width:10%" >View Expenses
-        </button></div>
-        <div> 
-            <ol id="expenselist"></ol> 
-         </div>         
     </section>
 </body>
 
