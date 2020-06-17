@@ -1,4 +1,4 @@
-Web Application Name: splitgorithm
+Web Application Name: Splitgorithm
 
 Group member name - Student Numbers:
 Moshekwa Matthews Malatji - 1387556
