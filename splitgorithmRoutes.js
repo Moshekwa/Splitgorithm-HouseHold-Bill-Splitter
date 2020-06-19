@@ -281,34 +281,7 @@ router.post('/api/generateCode', (req, res) => {
         return elem.username === req.body.username
       })
       if (index >= 0) {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.EMAIL,
-            pass: process.env.PASSWORD
-          }
-        })
-
-        const mailOptions = {
-          from: 'mysplitgorithm@gmail.com',
-          to: result.recordset[index].email,
-          subject: 'Welcome to Splitgorithm',
-          text: 'We are within',
-          html: `<center><h1>Greetings, ${result.recordset[index].username},</h1><br/><br/><p>  
-                  <h2>Please use the following link <br/>
-                  to reset your password,<br/>
-                  Like: ${G_code}<br/><br/><br/></center> 
-                  Splitgorithm Team<br/>
-                  Splitgorithm PTY LTD</p></h2>`
-        }
-
-        transporter.sendMail(mailOptions, (err, data) => {
-          if (err) {
-            console.log('Error has occured: ', err)
-          } else {
-            console.log('Email sent successefully')
-          }
-        })
+        send.resetPassword(result.recordset[index].email, result.recordset[index].username, G_code)
         res.redirect(req.baseUrl + '/resetPassword')
       } else {
         res.redirect(req.baseUrl + '/generateCode')
