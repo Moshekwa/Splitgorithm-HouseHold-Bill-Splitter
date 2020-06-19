@@ -6,6 +6,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const nodemailer = require('nodemailer')
+const send = require('./public/script/emailNotification.js')
 
 const G_code = Math.random().toString(36).replace('0.', '')
 
@@ -114,6 +115,7 @@ router.post('/api/profile', function (req, res) {
       console.log(result.recordset)
       name = result.recordset[index].name
     })
+
   if (Index >= 0) {
     console.log('Updating the following profile: ', name)
     if (req.body.newusername !== '') {
@@ -145,6 +147,7 @@ router.post('/api/profile', function (req, res) {
     res.redirect(req.baseUrl + '/profile')
   }
 })
+
 router.post('/api/expenses', function (req, res) {
   console.log('Posting the following expense: ', req.body.expensename)
   const expenseObject = {
@@ -178,6 +181,7 @@ router.post('/api/expenses', function (req, res) {
       console.log(err)
     })
 })
+
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
   const memberObject = {
@@ -188,40 +192,10 @@ router.post('/api/signup', function (req, res) {
   }
   if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' && memberObject.password !== '') {
     members.addMember(memberObject)
+    send.welcomeMail(members.getMember(members.getMembers().length - 1).email, members.getMember(members.getMembers().length - 1).username)
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/signup')
 
-  // Welcome users with an email
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD
-    }
-  })
-
-  const mailOptions = {
-    from: 'mysplitgorithm@gmail.com',
-    to: members.getMember(members.getMembers().length - 1).email,
-    subject: 'Welcome to Splitgorithm',
-    text: 'We are within',
-    html: `<center><h1>Greetings, ${members.getMember(members.getMembers().length - 1).username}, </h1><br/><br/><p>
-    Welcome to Splitgorithm app. <br/>
-    Your sign-up comes with services<br/>
-    'offered by Splitgorithm,<br/><br/><br/></center> 
-    Splitgorithm Team<br/>
-    Splitgorithm PTY LTD</p>`
-  }
-
-  transporter.sendMail(mailOptions, (err, data) => {
-    if (err) {
-      console.log('Error has occured: ', err)
-    } else {
-      console.log('Email sent successefully')
-    }
-  })
-
-  // Connect to db
   db.sql.connect(db.getConfig())
     .then(() => {
       console.log('connected')
