@@ -74,7 +74,7 @@ margin: 0px 10px;
   margin-top: 19px;
 } 
 
-.paybills .button1 {
+.paybills .button3 {
   font-size: 2vw;
   color:#002211;
   border: #002211 solid 4px;
@@ -92,6 +92,10 @@ margin: 0px 10px;
   left: 50%;
   transform: translate(-50%,-50%);
 }  
+.button3:hover{
+  background-color:  #000030;
+  color: white;
+}
 
 .button1:hover {
   background-color: #000030;
