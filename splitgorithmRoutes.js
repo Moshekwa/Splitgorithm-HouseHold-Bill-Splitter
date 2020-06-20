@@ -51,26 +51,107 @@ router.get('/resetPassword', function (req, res) {
 })
 
 router.get('/api/list', function (req, res) {
-  res.json(members.getMembers()) // Respond with JSON
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 router.get('/api/groups', function (req, res) {
   res.json(groups.getGroups()) // Respond with JSON
 })
 
-router.post('/api/group', function (req, res) {
-  console.log(`Adding ${req.body.member}$ on group ${req.body.name}$`)
-  const found = groups.isExisting(req.body.name) // this will be the index where a group is found or false if it doesn't exist
-  if (typeof (found) === 'number') {
-    groups.getParticularGroup(found).groupMembers.push(members.getMember(req.body.member - 1))
-  } else if (found === null) {
-    const myGroup = {
-      groupMembers: [members.getMember(req.body.member - 1)]
-    }
-    myGroup[req.body.name] = 'my Group' // the key is the group name, this key is used to add members
-    // on existing groups
-    groups.addGroup(myGroup)
-  }
+router.post('/api/joingroup', function (req, res) {
+  db.pools
+  // Run query
+    .then((pool) => {
+      const dbRequest = pool.request()
+      dbRequest.input('groupName', `${req.body.groupName}`)
+      return dbRequest
+      // perfoming a query
+        .query('select groupName from SplitgorithmGroups WHERE groupName =  @groupName')
+    })
+  // Processing the response
+    .then(result => {
+      if (result.recordset[0].groupName === req.body.groupName) { // checking if a group exists
+        db.pools
+          .then((pool) => {
+            const dbrequest = pool.request()
+            dbrequest.input('userName', `${req.body.userName}`)
+            dbrequest.input('role', 'member')
+            return dbrequest
+              .query(`INSERT INTO ${req.body.groupName}(memberUserName, role) VALUES (@userName, @role)`)
+          })
+          .then(data => {
+            console.log(data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+  res.redirect(req.baseUrl + '/members')
+})
+
+router.post('/api/creategroup', function (req, res) {
+  console.log(`Creating a group ${req.body.groupName} with member ${req.body.userName}`)
+
+  db.sql.connect(db.getConfig())
+    .then(() => {
+      console.log('connected')
+
+      const table = new db.sql.Table(`${req.body.groupName}`)
+      table.create = true
+      table.columns.add('memberUserName', db.sql.VarChar(128), { nullable: false, primary: true })
+      table.columns.add('role', db.sql.VarChar(128), { nullable: false })
+      table.rows.add(req.body.userName, 'group leader')
+      const request = new db.sql.Request()
+      return request.bulk(table)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+  db.sql.connect(db.getConfig())
+    .then(() => {
+      console.log('connected')
+
+      const table = new db.sql.Table('SplitgorithmGroups')
+      table.create = true
+      table.columns.add('groupName', db.sql.VarChar(128), { nullable: false, primary: true })
+      table.rows.add(`${req.body.groupName}`)
+      const request = new db.sql.Request()
+      return request.bulk(table)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
   res.redirect(req.baseUrl + '/members')
 })
 
