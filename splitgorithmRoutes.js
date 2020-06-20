@@ -51,7 +51,23 @@ router.get('/resetPassword', function (req, res) {
 })
 
 router.get('/api/list', function (req, res) {
-  res.json(members.getMembers()) // Respond with JSON
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 router.get('/api/groups', function (req, res) {
