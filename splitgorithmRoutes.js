@@ -74,19 +74,28 @@ router.get('/api/groups', function (req, res) {
   res.json(groups.getGroups()) // Respond with JSON
 })
 
-router.post('/api/group', function (req, res) {
-  console.log(`Adding ${req.body.member}$ on group ${req.body.name}$`)
-  const found = groups.isExisting(req.body.name) // this will be the index where a group is found or false if it doesn't exist
-  if (typeof (found) === 'number') {
-    groups.getParticularGroup(found).groupMembers.push(members.getMember(req.body.member - 1))
-  } else if (found === null) {
-    const myGroup = {
-      groupMembers: [members.getMember(req.body.member - 1)]
-    }
-    myGroup[req.body.name] = 'my Group' // the key is the group name, this key is used to add members
-    // on existing groups
-    groups.addGroup(myGroup)
-  }
+router.post('/api/creategroup', function (req, res) {
+  console.log(`Creating a group ${req.body.groupName} with member ${req.body.userName}`)
+
+  db.sql.connect(db.getConfig())
+    .then(() => {
+      console.log('connected')
+
+      const table = new db.sql.Table(`${req.body.groupName}`)
+      table.create = true
+      table.columns.add('memberUserName', db.sql.VarChar(128), { nullable: false, primary: true })
+      table.columns.add('role', db.sql.VarChar(128), { nullable: false })
+      table.rows.add(req.body.userName, 'group leader')
+      const request = new db.sql.Request()
+      return request.bulk(table)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
   res.redirect(req.baseUrl + '/members')
 })
 
