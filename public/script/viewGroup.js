@@ -7,20 +7,16 @@ fetch('/splitgorithm/api/groups') // Returns a Promise for the GET request
     else { throw 'Failed to load grouplist: response code invalid!' }
   })
   .then(function (data) { // Display the JSON data appropriately
-    const buttonG = document.getElementById('addButton2')
+    const buttonG = document.getElementById('buttons4')
     const groupNames = document.getElementById('groupNames')
     buttonG.addEventListener('click', function () {
       data.forEach(function (group) {
-        const li = document.createElement('LI')
-        const liText = document.createTextNode(`${Object.keys(group)[1]} : `)
-        li.appendChild(liText)
-        const Members = document.createTextNode('Members -->')
-        li.appendChild(Members)
-        group.groupMembers.forEach(function (friends) {
-          const text = document.createTextNode(`${friends.name}, `) // Create text node
-          li.appendChild(text) // Append the text to <p>
-        })
-        groupNames.appendChild(li)
+          // Create a new list entry
+          const li = document.createElement('LI')
+          const liText = document.createTextNode(group.memberUserName)
+          // Append list text to list item and list item to list
+          li.appendChild(liText)
+          groupNames.appendChild(li)
       })
     })
   })

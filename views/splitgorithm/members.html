@@ -86,17 +86,20 @@
         </div>
         <div class="view-group">
             <h2>View your group</h2>
-            <form action="/splitgorithm/api/joingroup" method="post">
-                <div><label for="GroupName">Group Name:</label>
-                    <input type="text" id="groupname" name="groupName"><br />
-                    <div class="button">
-                        <button class="buttons3" type="submit">View group</button>
+            <form action="/splitgorithm/api/groups" method="POST">
+                <div><label for="ShowGroup">Group Name:</label>
+                    <input type="text" id="showgroup" name="groupview"><br />
+                    <div class="viewbutton">
+                        <button class="buttons3" type="submit" id="buttons3">Submit</button>
                     </div>
             </form>
+            <div class="viewbutton">
+                <button class="buttons4" type="button" id="buttons4">View group</button>
+            </div>
         </div>
-    <div>
-        <ol id="groupNames"></ol>
-    </div>
+        <div>
+            <ol id="groupNames"></ol>
+        </div>
 
     <script>
         function myFunction() {

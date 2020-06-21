@@ -5,10 +5,10 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
-const nodemailer = require('nodemailer')
 const send = require('./public/script/emailNotification.js')
 
 const G_code = Math.random().toString(36).replace('0.', '')
+let groupToView
 
 // members in a house hold
 const members = require('./modules/members.js')
@@ -70,8 +70,56 @@ router.get('/api/list', function (req, res) {
     })
 })
 
+router.post('/api/groups', function (req, res) {
+  // res.json(groups.getGroups()) // Respond with JSON
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.groupName === req.body.groupview
+      })
+       if(index !==-1){
+         groupToView = req.body.groupview
+       }
+      res.redirect(req.baseUrl + '/members')
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
 router.get('/api/groups', function (req, res) {
-  res.json(groups.getGroups()) // Respond with JSON
+  // Make a query to the database
+  console.log('Returning groups from the database')
+  db.pools
+    // Run query
+    .then((pool) => {
+      const dbRequest = pool.request()
+      dbRequest.input('groupName', 'Msomi')
+      return dbRequest
+        // perfoming a query
+        .query(`select * from ${groupToView}`)
+    })
+    // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 router.post('/api/joingroup', function (req, res) {
@@ -176,9 +224,10 @@ router.get('/api/expenselist', function (req, res) {
       })
     })
 })
-let name = ''
-let Index = 0
+
 router.post('/api/profile', function (req, res) {
+  let name = ''
+  let Index = 0
   // Make a query to the database
   db.pools
   // Run query
@@ -239,7 +288,7 @@ router.post('/api/expenses', function (req, res) {
   if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.payer !== '') {
     expenses.addExpense(expenseObject)
     res.redirect(req.baseUrl + '/homepage')
-  } else res.redirect(req.baseUrl + '/expense')
+  } else res.redirect(req.baseUrl + '/expenses')
   db.sql.connect(db.getConfig())
     .then(() => {
       console.log('connected')
