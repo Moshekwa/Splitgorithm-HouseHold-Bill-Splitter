@@ -26,7 +26,8 @@ router.get('/signup', function (req, res) {
 
 router.get('/homepage', function (req, res) {
   if (req.session.loggedIn)
-  { console.log('The session has been set')
+  { 
+    console.log('The session has been set')
     res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
   else if (!req.session.loggedIn) {
     console.log('The session has not been set')
@@ -43,8 +44,24 @@ router.get('/expenses', function (req, res) {
 })
 
 router.get('/profile', function (req, res) {
+  if (req.session.loggedIn) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'profile.html'))
+  }
+  else { 
+    res.redirect(req.baseUrl + '/welcome')
+  }
 })
+
+router.get('/signOut', function (req, res) {
+  if(req.session.loggedIn)  
+  { 
+    req.session.loggedIn = false
+    res.redirect(req.baseUrl + '/welcome')
+  }
+  else 
+  {res.redirect(req.baseUrl) }
+})
+
 router.get('/payments', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
 })
