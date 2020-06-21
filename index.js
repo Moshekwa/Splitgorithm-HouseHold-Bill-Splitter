@@ -9,6 +9,8 @@ const bodyParser = require('body-parser')
 // loading our routers
 const mainRouter = require('./mainRoutes.js')
 const todoRouter = require('./splitgorithmRoutes.js')
+// loading express sessions dependency
+const sessions = require('express-session')
 
 // tell express to use bodyParser for JSON and URL encoded form bodies
 app.use(bodyParser.json())
