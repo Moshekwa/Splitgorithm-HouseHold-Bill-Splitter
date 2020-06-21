@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const nodemailer = require('nodemailer')
 const send = require('./public/script/emailNotification.js')
-
+let sessionUsername = null // Sessions variable  
 const G_code = Math.random().toString(36).replace('0.', '')
 
 // members in a house hold
@@ -25,7 +25,13 @@ router.get('/signup', function (req, res) {
 })
 
 router.get('/homepage', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
+  if (req.session.loggedIn)
+  { console.log('The session has been set')
+    res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
+  else if (!req.session.loggedIn) {
+    console.log('The session has not been set')
+    res.redirect(req.baseUrl + '/welcome')
+  }
 })
 
 router.get('/members', function (req, res) {
@@ -179,6 +185,7 @@ router.get('/api/expenselist', function (req, res) {
 })
 let name = ''
 let Index = 0
+
 router.post('/api/profile', function (req, res) {
   // Make a query to the database
   db.pools
@@ -368,6 +375,7 @@ router.get('/welcome', function (req, res) {
 
 router.post('/api/welcome', function (req, res) {
   console.log('Signing in the following member:', req.body.username)
+ 
   // Make a query to the database
   db.pools
   // Run query
@@ -385,6 +393,10 @@ router.post('/api/welcome', function (req, res) {
         // Load hash from your password DB.
         console.log(bcrypt.compareSync(req.body.password, result.recordset[index].password))
         if (bcrypt.compareSync(req.body.password, result.recordset[index].password) === true) {
+          sessionUsername = result.recordset[index].username
+          //  Ensuring the session is initiaized upon logging in
+          req.session.loggedIn = true   
+          req.session.user = sessionUsername
           res.redirect(req.baseUrl + '/homepage')
         } else res.redirect(req.baseUrl + '/welcome')
       } else res.redirect(req.baseUrl + '/welcome')

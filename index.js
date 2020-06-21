@@ -16,7 +16,7 @@ const session = require('express-session')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 //app.use(session({ secret: process.env.SESSION_SECRET )
-app.use(session({secret: "mateu" }))
+app.use(session({secret: "mateu", resave: false, saveUninitialized: true}));
 
 // mounting our routers
 app.use('/', mainRouter)
