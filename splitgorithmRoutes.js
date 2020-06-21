@@ -237,6 +237,7 @@ router.post('/api/expenses', function (req, res) {
     payer: req.body.payer,
     group: req.body.group
   }
+  let sharedPrice = 0
   // indices for searching through groups table and users table
   let index1
   let index2
@@ -316,12 +317,45 @@ router.post('/api/expenses', function (req, res) {
                       dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
                       dbRequest.input('expenseContrib', `${req.body.expensename},Contribution`)
                       console.log(`${req.body.expensename},Contribution`)
-                      const expenseDivision = req.body.cost / result.recordset.length
-                      dbRequest.input('expenseDivided', expenseDivision)
+                      sharedPrice = req.body.cost / result.recordset.length
+                      console.log(sharedPrice)
+                      dbRequest.input('expenseDivided', sharedPrice)
                       return dbRequest
                       // perfoming a query
 
                         .query(`ALTER TABLE ${req.body.group} ADD ${req.body.expensename}Contribution VarChar(128), ${req.body.expensename}OwedTo VarChar(128) `)
+                    })
+                    .then(data => {
+                      db.pools
+                        .then(pool => {
+                          const dbRequest = pool.request()
+                          dbRequest.input('groupName', `${req.body.group}`)
+                          dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                          dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                          dbRequest.input('payer', `${req.body.payer}`)
+                          dbRequest.input('amount', sharedPrice)
+                          dbRequest.input('member', 'member')
+
+                          return dbRequest
+                            // perfoming a query
+                            .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =${req.body.payer} WHERE memberUserName !=@payer`)
+                        })
+                        .then(result => {
+                          db.pools
+                            .then(pool => {
+                              const dbRequest = pool.request()
+                              dbRequest.input('groupName', `${req.body.group}`)
+                              dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                              dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                              dbRequest.input('payer', `${req.body.payer}`)
+                              dbRequest.input('amount', sharedPrice)
+                              dbRequest.input('paid', 'PostedExpense')
+
+                              return dbRequest
+                                // perfoming a query
+                                .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
+                            })
+                        })
                     })
                 })
             })
