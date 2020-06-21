@@ -338,7 +338,7 @@ router.post('/api/expenses', function (req, res) {
 
                           return dbRequest
                             // perfoming a query
-                            .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =${req.body.payer} WHERE memberUserName !=@payer`)
+                            .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@payer WHERE memberUserName !=@payer`)
                         })
                         .then(result => {
                           db.pools
