@@ -1,0 +1,113 @@
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'sansserifexbflf-italic';
+}
+
+section{
+  background: url(bg.jpeg) no-repeat;
+  background-position: center;
+  background-size: cover;
+  color: #042331;
+  height: 100vh;
+  margin-left: 300px;
+  transition: all .5s;
+  font-family: 'sansserifexbflf-italic';
+  font-size: 2vw;
+} 
+
+.side-bar .button{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
+  display: block;
+  height: 3vw;
+  width: 13vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  border-top: 1px solid rgba(255,255,255,.1);
+  transition: .4s;
+}
+.content {
+    font
+}
+.buttons1 {
+  font-size: 2vw;
+  color:#002211;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 15%;
+  height: 5%;
+  position: absolute;
+  top: 10%;
+  left: 20.5vw;
+  transform: translate(-50%,-50%);
+}
+
+.buttons2 {
+  font-size: 2vw;
+  color:#002211;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 15%;
+  height: 5%;
+  position: absolute;
+  top: 10%;
+  left: 35.5vw;
+  transform: translate(-50%,-50%);
+}
+
+.buttons3 {
+  font-size: 2vw;
+  color:#002211;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 15%;
+  height: 5%;
+  position: absolute;
+  top: 10%;
+  left: 50.5vw;
+  transform: translate(-50%,-50%);
+}
+
+
+
+.buttons1:hover {
+  background-color: rgb(189, 156, 8);
+}
+.buttons2:hover {
+  background-color: rgb(127, 189, 13);
+}
+.buttons3:hover {
+  background-color: rgb(2, 133, 111);
+}
