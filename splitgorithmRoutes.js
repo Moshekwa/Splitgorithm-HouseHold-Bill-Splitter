@@ -297,6 +297,33 @@ router.post('/api/expenses', function (req, res) {
             })
             .then(data => {
               console.log(data)
+
+              db.pools
+              // Run query
+                .then((pool) => {
+                  const dbRequest = pool.request()
+                  dbRequest.input('groupName', `${req.body.group}`)
+                  return dbRequest
+                  // perfoming a query
+                    .query(`select * from ${req.body.group}`)
+                })
+                .then(result => {
+                  console.log(result.recordset)
+                  db.pools
+                    .then(pool => {
+                      const dbRequest = pool.request()
+                      dbRequest.input('groupName', `${req.body.group}`)
+                      dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                      dbRequest.input('expenseContrib', `${req.body.expensename},Contribution`)
+                      console.log(`${req.body.expensename},Contribution`)
+                      const expenseDivision = req.body.cost / result.recordset.length
+                      dbRequest.input('expenseDivided', expenseDivision)
+                      return dbRequest
+                      // perfoming a query
+
+                        .query(`ALTER TABLE ${req.body.group} ADD ${req.body.expensename}Contribution VarChar(128), ${req.body.expensename}OwedTo VarChar(128) `)
+                    })
+                })
             })
             .catch(err => {
               console.log(err)
