@@ -14,7 +14,8 @@ const G_code = Math.random().toString(36).replace('0.', '')
 const members = require('./modules/members.js')
 // expense list for the household
 const expenses = require('./modules/expenses.js')
-
+// module to manage users sessions
+const session = require('./modules/sessions.js') 
 // household groups
 const groups = require('./modules/groups.js')
 const { sql } = require('./db.js')
