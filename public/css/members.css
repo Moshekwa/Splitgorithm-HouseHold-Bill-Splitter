@@ -7,6 +7,11 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
+/* 
+ img {
+   max-width: 15vw;
+   height: 13vw; 
+} */
 
 .side-bar {
   position: fixed;
@@ -84,8 +89,8 @@ section{
   background-color: rgb(189, 156, 8);;
   color: #042331;
 }
+
 .boxes {
-  position: absolute;
   top: 13%;
   left: .8vw;
 }
@@ -96,7 +101,7 @@ input{
     border: none; 
     border: #042331 solid 2px; 
     font-size: 1vw;
-} 
+}  
 
 .content {
   font-size: 2vw;
@@ -109,7 +114,7 @@ input{
 
 .create-group {
     width: 30vw;
-    height: 0vw;
+    height: auto;
     font-size: 2vw;
     color:#063146;
     line-height: 5vw;
@@ -120,17 +125,32 @@ input{
 } 
 
 .join-group {
-    width: 118vw;
-    height: 0vw;
+    width: 35vw;
+    height: auto;
     font-size: 2vw;
     color:#063146;
     line-height: 5vw;
     text-align: center;
     -webkit-background-size:cover;
     background-size: cover;
-    background-position: center center;   
+    background-position: center center;  
+    position: absolute;
+    transform: translate(140%,-100%);
 } 
 
+.view-group {
+    width: 35vw;
+    height: auto;
+    font-size: 2vw;
+    color:#063146;
+    line-height: 5vw;
+    text-align: center;
+    -webkit-background-size:cover;
+    background-size: cover;
+    background-position: center center;  
+    position: absolute;
+    transform: translate(-10%,10%);
+}
 .buttons2{
   font-size: 2vw;
   border: #002211 solid .1vw;
@@ -171,7 +191,7 @@ input{
   box-sizing: border-box;
   border-bottom: 1px solid black;
   transition: .4s;
-  transform: translate(-280%,0%);
+  transform: translate(-10%,0%);
 }
 
 .buttons3:hover {

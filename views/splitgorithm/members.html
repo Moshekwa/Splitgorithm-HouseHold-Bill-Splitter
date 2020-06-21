@@ -7,11 +7,13 @@
     <title>Members</title>
     <script src="/cdn/script/viewMembers.js"></script>
     <script src="/cdn/script/viewGroup.js"></script>
-    <link rel="stylesheet" href="/public/css/members.css">
+    <link rel="stylesheet" href="/cdn/css/members.css">
 </head>
 
 <div class="side-bar">
-    <header>Splitgorithm</header><br>
+    <header>Splitgorithm
+    <!-- <img src="/cdn/images/logo.jpg" alt="CSGO Howl" style="float:left" ;> -->
+    </header>
     <form action="/splitgorithm/homepage" method="GET">
         <div>
             <button class="button" type="submit">Home</button><br>
@@ -48,9 +50,9 @@
     <section>
         <div class="content" id="buttons">
             <center><h1>Household Membership</h1>            
-            <button type="button" id="addButton1" class="buttons1">Groups</button>
-            <button type="button" id="addButton2" class="buttons1  active">Members</button>
-            <button type="button" id="addButton3" class="buttons1">Other</button>
+            <button type="button" id="addButton1" class="buttons1  active">Groups</button><!--
+            --><button type="button" id="addButton2" class="buttons1">Members</button><!-- 
+            --><button type="button" id="addButton3" class="buttons1">Other</button>
             </center>
             <div> 
                <ol id="membersList"></ol> 
@@ -81,9 +83,16 @@
                     </div>
                 </form>
             </div>
-            <div class="btn-group">
-                <button class="buttons3" type="button" id="addButton2" >View group</button>
-            </div>
+        </div>
+        <div class="view-group">
+            <h2>View your group</h2>
+            <form action="/splitgorithm/api/joingroup" method="post">
+                <div><label for="GroupName">Group Name:</label>
+                    <input type="text" id="groupname" name="groupName"><br />
+                    <div class="button">
+                        <button class="buttons3" type="submit">View group</button>
+                    </div>
+            </form>
         </div>
     <div>
         <ol id="groupNames"></ol>
