@@ -265,44 +265,50 @@ router.post('/api/expenses', function (req, res) {
 
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
+  let validMember = false
   const memberObject = {
     name: req.body.name,
     username: req.body.username,
     email: req.body.email,
     password: req.body.password
   }
-  if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' && memberObject.password !== '') {
+
+  if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' &&
+  memberObject.password !== '' && memberObject.password === req.body.Cpassword) {
+    validMember = true
     members.addMember(memberObject)
     send.welcomeMail(members.getMember(members.getMembers().length - 1).email, members.getMember(members.getMembers().length - 1).username)
     res.redirect(req.baseUrl + '/homepage')
   } else res.redirect(req.baseUrl + '/signup')
 
-  db.sql.connect(db.getConfig())
-    .then(() => {
-      console.log('connected')
+  if (validMember === true) {
+    db.sql.connect(db.getConfig())
+      .then(() => {
+        console.log('connected')
 
-      const table = new db.sql.Table('SplitgorithmUsers')
-      table.create = true
-      table.columns.add('name', db.sql.VarChar(128), { nullable: false })
-      table.columns.add('username', db.sql.VarChar(128), { nullable: false, primary: true })
-      table.columns.add('email', db.sql.VarChar(128), { nullable: false })
-      table.columns.add('password', db.sql.VarChar(128), { nullable: false })
+        const table = new db.sql.Table('SplitgorithmUsers')
+        table.create = true
+        table.columns.add('name', db.sql.VarChar(128), { nullable: false })
+        table.columns.add('username', db.sql.VarChar(128), { nullable: false, primary: true })
+        table.columns.add('email', db.sql.VarChar(128), { nullable: false })
+        table.columns.add('password', db.sql.VarChar(128), { nullable: false })
 
-      const salt = bcrypt.genSaltSync(10)
-      const hashedPassword = bcrypt.hashSync(members.getMember(members.getMembers().length - 1).password, salt)
+        const salt = bcrypt.genSaltSync(10)
+        const hashedPassword = bcrypt.hashSync(members.getMember(members.getMembers().length - 1).password, salt)
 
-      // adding a member in a table
-      table.rows.add(members.getMember(members.getMembers().length - 1).name, members.getMember(members.getMembers().length - 1).username,
-        members.getMember(members.getMembers().length - 1).email, hashedPassword)
-      const request = new db.sql.Request()
-      return request.bulk(table)
-    })
-    .then(data => {
-      console.log(data)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+        // adding a member in a table
+        table.rows.add(members.getMember(members.getMembers().length - 1).name, members.getMember(members.getMembers().length - 1).username,
+          members.getMember(members.getMembers().length - 1).email, hashedPassword)
+        const request = new db.sql.Request()
+        return request.bulk(table)
+      })
+      .then(data => {
+        console.log(data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 })
 
 router.get('/welcome', function (req, res) {

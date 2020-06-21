@@ -26,13 +26,14 @@
                     <h1 class="welcome">Please Fill In The Form To Sign Up</h1>
                     <form action="/splitgorithm/api/signup" method="post">
                     <div><label for="MemberName" style="color: #C0C0C0">Name:</label></div>
-                    <div><input type="text" id="membername" name="name"></div>
+                    <div><input type="text" id="membername" placeholder="name" name="name"></div>
                     <div><label for="MemberUserName" style="color: #C0C0C0">Username:</label></div>
-                    <div><input type="text" id="memberUserName" name="username"></div>
+                    <div><input type="text" id="memberUserName" placeholder="username" name="username"></div>
                     <div><label for="MemberEmail" style="color: #C0C0C0">Email:</label></div>
-                    <div><input type="text" id="memberemail" name="email"></div>
+                    <div><input type="text" id="memberemail" placeholder="email address" name="email"></div>
                     <div><label for="MemberPassword" style="color: #C0C0C0">Password:</label></div>
-                    <div><input type="password" id="password" name="password">
+                    <div><input type="password" id="password" placeholder="password" name="password">
+                    <div><input type="password" id="Cpassword" placeholder="Confirm password" name="Cpassword" ></div>
                     <button class="ui-component__password-field__show-hide" type="button" onclick="toggle(this);">Show</button></div>
                     <div class="button">
                         <button type="submit">Sign Up</button>
