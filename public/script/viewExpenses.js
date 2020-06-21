@@ -16,7 +16,7 @@ fetch('/splitgorithm/api/expenselist') // Returns a Promise for the GET request
       data.forEach(function (expense) {
       // Create a new list entry
         const li = document.createElement('LI')
-        const liText = document.createTextNode(expense.Name + ', Cost =  ' + expense.Amount + ', Expense Payer = ' + expense.Payer)
+        const liText = document.createTextNode(expense.Name + ', Cost : R ' + expense.Amount + ', Expense Payer :' + expense.Payer + ', Group Name of Payer: ' + expense.GroupName)
         // Append list text to list item and list item to list
         li.appendChild(liText)
         expenseList.appendChild(li)
