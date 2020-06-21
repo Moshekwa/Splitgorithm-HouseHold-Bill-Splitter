@@ -8,7 +8,6 @@
     <script src="/cdn/script/viewMembers.js"></script>
     <script src="/cdn/script/viewGroup.js"></script>
     <link rel="stylesheet" href="/public/css/members.css">
-    <link rel="stylesheet" href="/public/css/homepage.css">
 </head>
 
 <div class="side-bar">
@@ -47,57 +46,70 @@
 
 <body>
     <section>
-        <div class="content">
+        <div class="content" id="buttons">
             <center><h1>Household Membership</h1>            
-            <div class="buttons" >
-            <button onclick="myFunction()" type="button" id="addButton1" class="buttons1">Groups</button>
-            <button type="button" id="addButton2" class="buttons2">Members</button>
-            <button type="button" id="addButton3" class="buttons3">Other</button>
-            </div></center>
+            <button type="button" id="addButton1" class="buttons1">Groups</button>
+            <button type="button" id="addButton2" class="buttons1  active">Members</button>
+            <button type="button" id="addButton3" class="buttons1">Other</button>
+            </center>
             <div> 
                <ol id="membersList"></ol> 
             </div>         
         </div>
-    <div id="onclick">
-        <form action="/splitgorithm/api/creategroup" method="post">
-        
-            <div><label for="GroupName">Group Name:</label></div>
-            <div><input type="text" id="groupname" name="groupName"></div>
-            <div><label for="UserName">Enter your username</label></div>
-            <div><input type="text" id="username" name="userName"></div>
-            <div class="button">
-                <button type="submit">create group</button>
+        <span class="line"></span>
+        <div class="boxes" id="onclick" >
+            <div class="create-group">
+                <h2>Create new group</h2>
+                <form action="/splitgorithm/api/creategroup" method="post">
+                    <div><label for="GroupName">Group Name:</label>
+                    <input type="text" id="groupname" name="groupName"><br/>
+                    <div></div><label for="UserName">Your username:</label>
+                    <input type="text" id="username" name="userName"></div>
+                    <button class="buttons2" type="submit">Create group</button>
+                </form>
+                <span class="line"></span>
+             </div>
+            <div class="join-group">
+                <h2>Join existing group</h2>
+                <form action="/splitgorithm/api/joingroup" method="post">
+                    <div><label for="GroupName">Group Name:</label>
+                    <input type="text" id="groupname" name="groupName"><br/>
+                    <div><label for="UserName">Your username:</label>
+                    <input type="text" id="username" name="userName"></div>
+                    <div class="button">
+                        <button class="buttons2" type="submit">Join group</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    <form action="/splitgorithm/api/joingroup" method="post">
-        <div><label for="GroupName">Enter the name of group you want to join:</label></div>
-        <div><input type="text" id="groupname" name="groupName"></div>
-        <div><label for="UserName">Enter your username</label></div>
-        <div><input type="text" id="username" name="userName"></div>
-        <div class="button">
-            <button type="submit">join group</button>
+            <div class="btn-group">
+                <button class="buttons3" type="button" id="addButton2" >View group</button>
+            </div>
         </div>
-    </form>
-    <center>
-        <div class="btn-group" style="width:100%">
-            <button type="button" id="addButton2" style="width:10%" >Click here to see groups</button>
-        </div>
-    </center>
     <div>
         <ol id="groupNames"></ol>
     </div>
-    </section>
+
     <script>
         function myFunction() {
             var x = document.getElementById("onclick");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
+            if (x.style.display === "block") {
                 x.style.display = "none";
+            } else {
+                x.style.display = "block";
             }
         }
-    </script>
-    
+        // Add active class to the current button (highlight it)
+        var header = document.getElementById("buttons");
+        var btns = header.getElementsByClassName("buttons1");
+        for (var i = 0; i < btns.length; i++){
+            btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+            });
+        }
+          </script>
+    </section>
 </body>
 
 </html>

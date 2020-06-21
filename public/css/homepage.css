@@ -24,6 +24,7 @@ body {
   text-align: center;
   background: #063146;
   user-select: none;
+  
 }
 
 section{
@@ -53,7 +54,6 @@ section{
   font-size: 1vw;
   box-sizing: border-box;
   border-bottom: 1px solid black;
-  border-top: 1px solid rgba(255,255,255,.1);
   transition: .4s;
 }
 
