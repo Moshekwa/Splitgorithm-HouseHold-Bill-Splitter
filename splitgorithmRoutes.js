@@ -5,10 +5,10 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
-const nodemailer = require('nodemailer')
 const send = require('./public/script/emailNotification.js')
 let sessionUsername = null // Sessions variable  
 const G_code = Math.random().toString(36).replace('0.', '')
+let groupToView
 
 // members in a house hold
 const members = require('./modules/members.js')
@@ -75,6 +75,31 @@ router.get('/resetPassword', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
 })
 
+router.post('/api/sendInvite', (req, res) => {
+  console.log('Verifying user group')
+
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.groupName === req.body.userGroup
+      })
+      if (index !== 0) {
+        send.inviteFriends(req.body.friendname, req.body.friendemail, req.body.userGroup)
+        res.redirect(req.baseUrl + '/members')
+      } else {
+        res.redirect(req.baseUrl + '/members')
+      }
+    })
+}) 
+
 router.get('/api/list', function (req, res) {
   db.pools
   // Run query
@@ -95,8 +120,56 @@ router.get('/api/list', function (req, res) {
     })
 })
 
+router.post('/api/groups', function (req, res) {
+  // res.json(groups.getGroups()) // Respond with JSON
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.groupName === req.body.groupview
+      })
+       if(index !==-1){
+         groupToView = req.body.groupview
+       }
+      res.redirect(req.baseUrl + '/members')
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
 router.get('/api/groups', function (req, res) {
-  res.json(groups.getGroups()) // Respond with JSON
+  // Make a query to the database
+  console.log('Returning groups from the database')
+  db.pools
+    // Run query
+    .then((pool) => {
+      const dbRequest = pool.request()
+      dbRequest.input('groupName', 'Msomi')
+      return dbRequest
+        // perfoming a query
+        .query(`select * from ${groupToView}`)
+    })
+    // Processing the response
+    .then(result => {
+      res.send(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 router.post('/api/joingroup', function (req, res) {
@@ -201,10 +274,11 @@ router.get('/api/expenselist', function (req, res) {
       })
     })
 })
-let name = ''
-let Index = 0
+
 
 router.post('/api/profile', function (req, res) {
+  let name = ''
+  let Index = 0
   // Make a query to the database
   db.pools
   // Run query
@@ -263,6 +337,7 @@ router.post('/api/expenses', function (req, res) {
     payer: req.body.payer,
     group: req.body.group
   }
+  let sharedPrice = 0
   // indices for searching through groups table and users table
   let index1
   let index2
@@ -323,6 +398,66 @@ router.post('/api/expenses', function (req, res) {
             })
             .then(data => {
               console.log(data)
+
+              db.pools
+              // Run query
+                .then((pool) => {
+                  const dbRequest = pool.request()
+                  dbRequest.input('groupName', `${req.body.group}`)
+                  return dbRequest
+                  // perfoming a query
+                    .query(`select * from ${req.body.group}`)
+                })
+                .then(result => {
+                  console.log(result.recordset)
+                  db.pools
+                    .then(pool => {
+                      const dbRequest = pool.request()
+                      dbRequest.input('groupName', `${req.body.group}`)
+                      dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                      dbRequest.input('expenseContrib', `${req.body.expensename},Contribution`)
+                      console.log(`${req.body.expensename},Contribution`)
+                      sharedPrice = req.body.cost / result.recordset.length
+                      console.log(sharedPrice)
+                      dbRequest.input('expenseDivided', sharedPrice)
+                      return dbRequest
+                      // perfoming a query
+
+                        .query(`ALTER TABLE ${req.body.group} ADD ${req.body.expensename}Contribution VarChar(128), ${req.body.expensename}OwedTo VarChar(128) `)
+                    })
+                    .then(data => {
+                      db.pools
+                        .then(pool => {
+                          const dbRequest = pool.request()
+                          dbRequest.input('groupName', `${req.body.group}`)
+                          dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                          dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                          dbRequest.input('payer', `${req.body.payer}`)
+                          dbRequest.input('amount', sharedPrice)
+                          dbRequest.input('member', 'member')
+
+                          return dbRequest
+                            // perfoming a query
+                            .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@payer WHERE memberUserName !=@payer`)
+                        })
+                        .then(result => {
+                          db.pools
+                            .then(pool => {
+                              const dbRequest = pool.request()
+                              dbRequest.input('groupName', `${req.body.group}`)
+                              dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                              dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                              dbRequest.input('payer', `${req.body.payer}`)
+                              dbRequest.input('amount', sharedPrice)
+                              dbRequest.input('paid', 'PostedExpense')
+
+                              return dbRequest
+                                // perfoming a query
+                                .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
+                            })
+                        })
+                    })
+                })
             })
             .catch(err => {
               console.log(err)
@@ -337,7 +472,7 @@ router.post('/api/expenses', function (req, res) {
         Error: err
       })
     })
-})
+  })
 
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
@@ -482,5 +617,4 @@ router.post('/api/resetPassword', (req, res) => {
       res.redirect(req.baseUrl + '/welcome')
     })
 })
-
 module.exports = router
