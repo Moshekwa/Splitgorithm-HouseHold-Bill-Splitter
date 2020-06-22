@@ -227,5 +227,5 @@ input{
   transform: translate(55vw,-45vw);
   margin-top: 30vw;
   position: absolute;
-  
+  text-align: left;
 }
