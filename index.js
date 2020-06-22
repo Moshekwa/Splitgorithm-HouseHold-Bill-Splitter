@@ -6,11 +6,15 @@ const app = express()
 // loading body-parser
 const bodyParser = require('body-parser')
 
+// loading express sessions dependency
+const session = require('express-session')
+
+// Setting up Sessions Management for cookies storage
+var MemoryStore = require('memorystore')(session)
+
 // loading our routers
 const mainRouter = require('./mainRoutes.js')
 const todoRouter = require('./splitgorithmRoutes.js')
-// loading express sessions dependency
-const session = require('express-session')
 
 const TWO_HOURS = 60 * 60 * 2 * 1000; // The lifespan of a cookie 
 const { 
@@ -24,7 +28,8 @@ const IN_PROD = NODE_ENV === 'production' // Production enviroment could be set 
 // tell express to use bodyParser for JSON and URL encoded form bodies
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-//app.use(session({ secret: process.env.SESSION_SECRET )
+
+// Sessions and Cookies
 app.use(session({
 name: SESS_NAME,
 secret: SESS_SECRET, 
@@ -34,7 +39,10 @@ cookie : {
     maxAge: SESS_LIFETIME,
     sameSite: true,
     secure: IN_PROD
-}
+},  
+store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  })
 }));
 
 // mounting our routers

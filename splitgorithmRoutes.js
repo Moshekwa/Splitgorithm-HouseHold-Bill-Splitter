@@ -27,10 +27,8 @@ router.get('/signup', function (req, res) {
 router.get('/homepage', function (req, res) {
   if (req.session.loggedIn)
   { 
-    console.log('The session has been set')
     res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
   else if (!req.session.loggedIn) {
-    console.log('The session has not been set')
     res.redirect(req.baseUrl + '/welcome')
   }
 })
