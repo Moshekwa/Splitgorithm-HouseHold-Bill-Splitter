@@ -54,11 +54,9 @@ router.get('/signOut', function (req, res) {
   if(req.session.loggedIn)  
   { 
     req.session.destroy(err => {
-      if(err)
-      res.redirect(req.baseUrl)  
+      if(err){
+      res.redirect(req.baseUrl)  }
     })
-    req.session.loggedIn = false
-    console.log('Signed Out')
     res.redirect(req.baseUrl + '/welcome')
   }
   else 
@@ -481,7 +479,6 @@ router.post('/api/resetPassword', (req, res) => {
       }
     })
     .then(result => {
-      // console.log(result.recordset)
       res.redirect(req.baseUrl + '/welcome')
     })
 })
