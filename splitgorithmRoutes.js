@@ -283,8 +283,10 @@ router.post('/api/expenses', function (req, res) {
   const expenseObject = {
     name: req.body.expensename,
     cost: req.body.cost,
-    payer: req.body.payer
+    payer: req.body.payer,
+    group: req.body.group
   }
+
   if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.payer !== '') {
     expenses.addExpense(expenseObject)
     res.redirect(req.baseUrl + '/homepage')
@@ -298,17 +300,140 @@ router.post('/api/expenses', function (req, res) {
       table.columns.add('Name', db.sql.VarChar(128), { nullable: false, primary: true })
       table.columns.add('Amount', db.sql.VarChar(128), { nullable: false })
       table.columns.add('Payer', db.sql.VarChar(128), { nullable: false })
-
-      // adding expense to the table
-      table.rows.add(expenses.getExpense(expenses.getExpenseList().length - 1).name, expenses.getExpense(expenses.getExpenseList().length - 1).cost, expenses.getExpense(expenses.getExpenseList().length - 1).payer)
-      const request = new db.sql.Request()
-      return request.bulk(table)
+  let sharedPrice = 0
+  // indices for searching through groups table and users table
+  let index1
+  let index2
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
     })
-    .then(data => {
-      console.log(data)
+    // Processing the response
+    .then(result => {
+      // check if entered group exists
+      index1 = result.recordset.findIndex(function (group) {
+        return group.groupName === req.body.group
+      })
     })
+    // If there's an error, return that with some description
     .catch(err => {
-      console.log(err)
+      res.send({
+        Error: err
+      })
+    })
+
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      index2 = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.payer
+      })
+      if (index1 !== -1 && index2 !== -1) {
+        console.log(index1)
+        if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.cost > 0) {
+          expenses.addExpense(expenseObject)
+          db.sql.connect(db.getConfig())
+            .then(() => {
+              console.log('connected')
+
+              const table = new db.sql.Table('HouseholdExpenses')
+              table.create = true
+              table.columns.add('Name', db.sql.VarChar(128), { nullable: false })
+              table.columns.add('Amount', db.sql.VarChar(128), { nullable: false })
+              table.columns.add('Payer', db.sql.VarChar(128), { nullable: false })
+              table.columns.add('GroupName', db.sql.VarChar(128), { nullable: false })
+
+              // adding expense to the table
+              table.rows.add(expenses.getExpense(expenses.getExpenseList().length - 1).name, expenses.getExpense(expenses.getExpenseList().length - 1).cost, expenses.getExpense(expenses.getExpenseList().length - 1).payer, expenses.getExpense(expenses.getExpenseList().length - 1).group)
+              const request = new db.sql.Request()
+              return request.bulk(table)
+            })
+            .then(data => {
+              console.log(data)
+
+              db.pools
+              // Run query
+                .then((pool) => {
+                  const dbRequest = pool.request()
+                  dbRequest.input('groupName', `${req.body.group}`)
+                  return dbRequest
+                  // perfoming a query
+                    .query(`select * from ${req.body.group}`)
+                })
+                .then(result => {
+                  console.log(result.recordset)
+                  db.pools
+                    .then(pool => {
+                      const dbRequest = pool.request()
+                      dbRequest.input('groupName', `${req.body.group}`)
+                      dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                      dbRequest.input('expenseContrib', `${req.body.expensename},Contribution`)
+                      console.log(`${req.body.expensename},Contribution`)
+                      sharedPrice = req.body.cost / result.recordset.length
+                      console.log(sharedPrice)
+                      dbRequest.input('expenseDivided', sharedPrice)
+                      return dbRequest
+                      // perfoming a query
+
+                        .query(`ALTER TABLE ${req.body.group} ADD ${req.body.expensename}Contribution VarChar(128), ${req.body.expensename}OwedTo VarChar(128) `)
+                    })
+                    .then(data => {
+                      db.pools
+                        .then(pool => {
+                          const dbRequest = pool.request()
+                          dbRequest.input('groupName', `${req.body.group}`)
+                          dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                          dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                          dbRequest.input('payer', `${req.body.payer}`)
+                          dbRequest.input('amount', sharedPrice)
+                          dbRequest.input('member', 'member')
+
+                          return dbRequest
+                            // perfoming a query
+                            .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@payer WHERE memberUserName !=@payer`)
+                        })
+                        .then(result => {
+                          db.pools
+                            .then(pool => {
+                              const dbRequest = pool.request()
+                              dbRequest.input('groupName', `${req.body.group}`)
+                              dbRequest.input('owedTo', `${req.body.expensename}OwedTo`)
+                              dbRequest.input('expenseContrib', `${req.body.expensename}Contribution`)
+                              dbRequest.input('payer', `${req.body.payer}`)
+                              dbRequest.input('amount', sharedPrice)
+                              dbRequest.input('paid', 'PostedExpense')
+
+                              return dbRequest
+                                // perfoming a query
+                                .query(`UPDATE ${req.body.group} SET ${req.body.expensename}Contribution = @amount, ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
+                            })
+                        })
+                    })
+                })
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        res.redirect(req.baseUrl + '/expenses')
+      } else res.redirect(req.baseUrl + '/expenses')
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
     })
 })
 
