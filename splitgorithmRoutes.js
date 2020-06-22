@@ -25,8 +25,6 @@ router.get('/signup', function (req, res) {
 })
 
 router.get('/homepage', function (req, res) {
-  
-  console.log(req.sessionID)
   if (req.session.loggedIn)
   { 
     console.log('The session has been set')
