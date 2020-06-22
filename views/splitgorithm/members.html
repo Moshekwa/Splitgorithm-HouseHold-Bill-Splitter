@@ -7,11 +7,13 @@
     <title>Members</title>
     <script src="/cdn/script/viewMembers.js"></script>
     <script src="/cdn/script/viewGroup.js"></script>
-    <link rel="stylesheet" href="/cdn/css/homepage.css">
+    <link rel="stylesheet" href="/cdn/css/members.css">
 </head>
 
 <div class="side-bar">
-    <header>Splitgorithm</header><br>
+    <header>Splitgorithm
+    <!-- <img src="/cdn/images/logo.jpg" alt="CSGO Howl" style="float:left" ;> -->
+    </header>
     <form action="/splitgorithm/homepage" method="GET">
         <div>
             <button class="button" type="submit">Home</button><br>
@@ -46,46 +48,81 @@
 
 <body>
     <section>
-        <div class="content">
-            <center>
-                <h1>Manage Household Members</h1>
-            <p>Please Click On the Following Button to View Members</p>             
-            <div class="btn-group" style="width:100%">
-            <button type="button" id="addButton1" style="width:10%" >View members
-            </button></div> </center>
+        <div class="content" id="buttons">
+            <center><h1>Household Membership</h1>            
+            <button type="button" id="addButton1" class="buttons1  active" >Groups</button><!--
+            --><button type="button" id="addButton2" class="buttons1" >Members</button><!-- 
+            --><button type="button" id="addButton3" class="buttons1" >Other</button>
+            </center>
             <div> 
                <ol id="membersList"></ol> 
             </div>         
         </div>
-   
-    <form action="/splitgorithm/api/creategroup" method="post">
-        <div><label for="GroupName">Group Name:</label></div>
-        <div><input type="text" id="groupname" name="groupName"></div>
-        <div><label for="UserName">Enter your username</label></div>
-        <div><input type="text" id="username" name="userName"></div>
-        <div class="button">
-            <button type="submit">create group</button>
+        <span class="line"></span>
+        <div class="boxes" id="onclick" >
+            <div class="create-group">
+                <h2>Create new group</h2>
+                <form action="/splitgorithm/api/creategroup" method="post">
+                    <div><label for="GroupName">Group Name:</label>
+                    <input type="text" id="groupname" name="groupName"><br/>
+                    <div></div><label for="UserName">Your username:</label>
+                    <input type="text" id="username" name="userName"></div>
+                    <button class="buttons2" type="submit">Create group</button>
+                </form>
+                <span class="line"></span>
+             </div>
+            <div class="join-group">
+                <h2>Join existing group</h2>
+                <form action="/splitgorithm/api/joingroup" method="post">
+                    <div><label for="GroupName">Group Name:</label>
+                    <input type="text" id="groupname" name="groupName"><br/>
+                    <div><label for="UserName">Your username:</label>
+                    <input type="text" id="username" name="userName"></div>
+                    <div class="button">
+                        <button class="buttons2" type="submit">Join group</button>
+                    </div>
+                </form>
+            </div>
+            <div class="view-group">
+                <h2>View your group</h2>
+                <form action="/splitgorithm/api/groups" method="POST">
+                    <div><label for="ShowGroup">Group Name:</label>
+                        <input type="text" id="showgroup" name="groupview"><br />
+                        <div class="viewbutton">
+                            <button class="buttons3" type="submit" id="buttons3">Submit</button>
+                        </div>
+                </form>
+                <div class="viewbutton">
+                    <button class="buttons4" type="button" id="buttons4">View group</button>
+                </div>
+            </div>
+            <div class="list" ><p></p>
+                <ol id="groupNames">Group Members</ol>
+            </div>
         </div>
-    </form>
-    <div>  <form action="/splitgorithm/api/joingroup" method="post">
-        <div><label for="GroupName">Enter the name of group you want to join:</label></div>
-        <div><input type="text" id="groupname" name="groupName"></div>
-        <div><label for="UserName">Enter your username</label></div>
-        <div><input type="text" id="username" name="userName"></div>
-        <div class="button">
-            <button type="submit">join group</button>
-        </div>
-    </form></div>
-    <center>
-        <div class="btn-group" style="width:100%">
-            <button type="button" id="addButton2" style="width:10%" >Click here to see groups</button>
-        </div>
-    </center>
-    <div>
-        <ol id="groupNames"></ol>
-    </div>
+
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("onclick");
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        }
+        // Add active class to the current button (highlight it)
+        var header = document.getElementById("buttons");
+        var btns = header.getElementsByClassName("buttons1");
+        for (var i = 0; i < btns.length; i++){
+            btns[i].addEventListener("click", function () {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+            });
+        }
+          </script>
     </section>
-    
 </body>
 
 </html>
