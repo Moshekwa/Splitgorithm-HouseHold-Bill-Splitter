@@ -8,7 +8,6 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-
 .side-bar {
   position: fixed;
   left: 0vw;
@@ -85,11 +84,6 @@ section{
   color: #042331;
 }
 
-.boxes {
-  top: 13%;
-  left: .8vw;
-}
-
 input{
     width: 10vw;
     height: 35px;
@@ -144,8 +138,9 @@ input{
     background-size: cover;
     background-position: center center;  
     position: absolute;
-    transform: translate(-10%,10%);
+    transform: translate(-150%,10%);
 }
+
 .buttons2{
   font-size: 2vw;
   border: #002211 solid .1vw;
@@ -217,15 +212,17 @@ input{
   background-color: rgb(169,169,169);
 } 
 
-.list{
+ .list {
   height: 0vw;
   width: auto;
   font-size: 2vw;
   list-style: square inside url("sqpurple.gif");
   list-style-position: outside;
   line-height: 2.5vw;
-  transform: translate(55vw,-45vw);
+  transform: translate(40vw,-45vw);
   margin-top: 30vw;
   position: absolute;
   text-align: left;
+  display: inline-block;
+  background-color: yellow; 
 }

@@ -50,9 +50,9 @@
     <section>
         <div class="content" id="buttons">
             <center><h1>Household Membership</h1>            
-            <button type="button" id="addButton1" class="buttons1  active">Groups</button><!--
-            --><button type="button" id="addButton2" class="buttons1">Members</button><!-- 
-            --><button type="button" id="addButton3" class="buttons1">Other</button>
+            <button type="button" id="addButton1" class="buttons1  active" >Groups</button><!--
+            --><button type="button" id="addButton2" class="buttons1" >Members</button><!-- 
+            --><button type="button" id="addButton3" class="buttons1" >Other</button>
             </center>
             <div> 
                <ol id="membersList"></ol> 
@@ -83,23 +83,24 @@
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="view-group">
-            <h2>View your group</h2>
-            <form action="/splitgorithm/api/groups" method="POST">
-                <div><label for="ShowGroup">Group Name:</label>
-                    <input type="text" id="showgroup" name="groupview"><br />
-                    <div class="viewbutton">
-                        <button class="buttons3" type="submit" id="buttons3">Submit</button>
-                    </div>
-            </form>
-            <div class="viewbutton">
-                <button class="buttons4" type="button" id="buttons4">View group</button>
+            <div class="view-group">
+                <h2>View your group</h2>
+                <form action="/splitgorithm/api/groups" method="POST">
+                    <div><label for="ShowGroup">Group Name:</label>
+                        <input type="text" id="showgroup" name="groupview"><br />
+                        <div class="viewbutton">
+                            <button class="buttons3" type="submit" id="buttons3">Submit</button>
+                        </div>
+                </form>
+                <div class="viewbutton">
+                    <button class="buttons4" type="button" id="buttons4">View group</button>
+                </div>
+            </div>
+            <div class="list" ><p></p>
+                <ol id="groupNames">Group Members</ol>
             </div>
         </div>
-        <div class="list">
-            <ol id="groupNames"></ol>
-        </div>
+
 
     <script>
         function myFunction() {
