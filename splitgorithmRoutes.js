@@ -286,20 +286,6 @@ router.post('/api/expenses', function (req, res) {
     payer: req.body.payer,
     group: req.body.group
   }
-
-  if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.payer !== '') {
-    expenses.addExpense(expenseObject)
-    res.redirect(req.baseUrl + '/homepage')
-  } else res.redirect(req.baseUrl + '/expenses')
-  db.sql.connect(db.getConfig())
-    .then(() => {
-      console.log('connected')
-
-      const table = new db.sql.Table('HouseholdExpenses')
-      table.create = true
-      table.columns.add('Name', db.sql.VarChar(128), { nullable: false, primary: true })
-      table.columns.add('Amount', db.sql.VarChar(128), { nullable: false })
-      table.columns.add('Payer', db.sql.VarChar(128), { nullable: false })
   let sharedPrice = 0
   // indices for searching through groups table and users table
   let index1
@@ -435,7 +421,7 @@ router.post('/api/expenses', function (req, res) {
         Error: err
       })
     })
-})
+  })
 
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
@@ -576,5 +562,4 @@ router.post('/api/resetPassword', (req, res) => {
       res.redirect(req.baseUrl + '/welcome')
     })
 })
-
 module.exports = router
