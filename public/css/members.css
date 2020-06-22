@@ -179,6 +179,30 @@ input{
   cursor: pointer;
   border-radius: 10px; 
   color:#002211;
+  height: 2vw;
+  width: 5vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  transition: .4s;
+  transform: translate(270%,-250%);
+}
+
+.buttons3:hover {
+  background-color: rgb(169,169,169);
+} 
+
+.buttons4{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
   height: 3vw;
   width: 8vw;
   line-height: 1vw;
@@ -186,9 +210,22 @@ input{
   box-sizing: border-box;
   border-bottom: 1px solid black;
   transition: .4s;
-  transform: translate(-10%,10%);
+  transform: translate(12vw,-7vw);
 }
 
-.buttons3:hover {
+.buttons4:hover {
   background-color: rgb(169,169,169);
 } 
+
+.list{
+  height: 0vw;
+  width: auto;
+  font-size: 2vw;
+  list-style: square inside url("sqpurple.gif");
+  list-style-position: outside;
+  line-height: 2.5vw;
+  transform: translate(55vw,-45vw);
+  margin-top: 30vw;
+  position: absolute;
+  
+}

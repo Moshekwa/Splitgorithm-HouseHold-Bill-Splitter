@@ -13,9 +13,9 @@ fetch('/splitgorithm/api/groups') // Returns a Promise for the GET request
       data.forEach(function (group) {
           // Create a new list entry
           const li = document.createElement('LI')
-          const liText = document.createTextNode(group.memberUserName)
+         li.innerHTML = group.memberUserName
           // Append list text to list item and list item to list
-          li.appendChild(liText)
+        //   li.appendChild(liText)
           groupNames.appendChild(li)
       })
     })
