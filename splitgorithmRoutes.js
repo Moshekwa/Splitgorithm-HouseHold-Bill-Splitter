@@ -53,11 +53,16 @@ router.get('/profile', function (req, res) {
 router.get('/signOut', function (req, res) {
   if(req.session.loggedIn)  
   { 
+    req.session.destroy(err => {
+      if(err)
+      res.redirect(req.baseUrl)  
+    })
     req.session.loggedIn = false
+    console.log('Signed Out')
     res.redirect(req.baseUrl + '/welcome')
   }
   else 
-  {res.redirect(req.baseUrl) }
+  {res.redirect(req.baseUrl) + '/welcome'}
 })
 
 router.get('/payments', function (req, res) {
