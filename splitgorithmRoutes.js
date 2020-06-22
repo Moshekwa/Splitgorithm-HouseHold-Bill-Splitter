@@ -6,7 +6,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const send = require('./public/script/emailNotification.js')
-
+let sessionUsername = null // Sessions variable  
 const G_code = Math.random().toString(36).replace('0.', '')
 let groupToView
 
@@ -14,7 +14,8 @@ let groupToView
 const members = require('./modules/members.js')
 // expense list for the household
 const expenses = require('./modules/expenses.js')
-
+// module to manage users sessions
+const session = require('./modules/sessions.js') 
 // household groups
 const groups = require('./modules/groups.js')
 const { sql } = require('./db.js')
@@ -24,7 +25,12 @@ router.get('/signup', function (req, res) {
 })
 
 router.get('/homepage', function (req, res) {
-  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
+  if (req.session.loggedIn)
+  { 
+    res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
+  else if (!req.session.loggedIn) {
+    res.redirect(req.baseUrl + '/welcome')
+  }
 })
 
 router.get('/members', function (req, res) {
@@ -36,8 +42,27 @@ router.get('/expenses', function (req, res) {
 })
 
 router.get('/profile', function (req, res) {
+  if (req.session.loggedIn) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'profile.html'))
+  }
+  else { 
+    res.redirect(req.baseUrl + '/welcome')
+  }
 })
+
+router.get('/signOut', function (req, res) {
+  if(req.session.loggedIn)  
+  { 
+    req.session.destroy(err => {
+      if(err){
+      res.redirect(req.baseUrl)  }
+    })
+    res.redirect(req.baseUrl + '/welcome')
+  }
+  else 
+  {res.redirect(req.baseUrl) + '/welcome'}
+})
+
 router.get('/payments', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
 })
@@ -249,6 +274,7 @@ router.get('/api/expenselist', function (req, res) {
       })
     })
 })
+
 
 router.post('/api/profile', function (req, res) {
   let name = ''
@@ -502,6 +528,7 @@ router.get('/welcome', function (req, res) {
 
 router.post('/api/welcome', function (req, res) {
   console.log('Signing in the following member:', req.body.username)
+ 
   // Make a query to the database
   db.pools
   // Run query
@@ -519,6 +546,10 @@ router.post('/api/welcome', function (req, res) {
         // Load hash from your password DB.
         console.log(bcrypt.compareSync(req.body.password, result.recordset[index].password))
         if (bcrypt.compareSync(req.body.password, result.recordset[index].password) === true) {
+          sessionUsername = result.recordset[index].username
+          //  Ensuring the session is initiaized upon logging in
+          req.session.loggedIn = true   
+          req.session.user = sessionUsername
           res.redirect(req.baseUrl + '/homepage')
         } else res.redirect(req.baseUrl + '/welcome')
       } else res.redirect(req.baseUrl + '/welcome')
@@ -583,7 +614,6 @@ router.post('/api/resetPassword', (req, res) => {
       }
     })
     .then(result => {
-      // console.log(result.recordset)
       res.redirect(req.baseUrl + '/welcome')
     })
 })
