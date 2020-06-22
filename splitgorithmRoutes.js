@@ -50,6 +50,31 @@ router.get('/resetPassword', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
 })
 
+router.post('/api/sendInvite', (req, res) => {
+  console.log('Verifying user group')
+
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.groupName === req.body.userGroup
+      })
+      if (index !== 0) {
+        send.inviteFriends(req.body.friendname, req.body.friendemail, req.body.userGroup)
+        res.redirect(req.baseUrl + '/members')
+      } else {
+        res.redirect(req.baseUrl + '/members')
+      }
+    })
+}) 
+
 router.get('/api/list', function (req, res) {
   db.pools
   // Run query

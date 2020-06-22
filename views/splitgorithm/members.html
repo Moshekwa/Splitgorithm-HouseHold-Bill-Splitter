@@ -102,16 +102,17 @@
             <div class="send-invite">
                 <h2>Invite your friend</h2>
                 <form action="/splitgorithm/api/sendinvite" method="POST">
-                    <div><label for="friendname">Friend Name:</label>
+                    <div><label for="userGroup">Group to Join:</label>
+                        <input type="text" id="userGroup" name="userGroup"><br> 
+                        <label for="friendname">Friend Name:</label>
                         <input type="text" id="friendname" name="friendname"><br />
-                        <div></div><label for="friendemail">Friend Email:</label>
+                        <label for="friendemail">Friend Email:</label>
                         <input type="text" id="friendemail" name="friendemail">
                     </div>
                     <button class="buttons5" type="submit">SEND</button>
                 </form>
             </div>
         </div>
-
 
     <script>
         function myFunction() {

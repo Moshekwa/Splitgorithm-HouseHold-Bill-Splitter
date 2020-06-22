@@ -252,3 +252,27 @@ input{
   position: absolute;
   transform: translate(52vw,-20vw);
 }
+
+.buttons5{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
+  height: 3vw;
+  width: 8vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  transition: .4s;
+  transform: translate(5vw,0vw);
+}
+
+.buttons5:hover {
+  background-color: rgb(169,169,169);
+} 
