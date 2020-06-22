@@ -3,6 +3,12 @@
 const express = require('express')
 const app = express()
 
+// Setting Up Redis for Sessions Storage/Management
+const redis = require('redis')
+const session = require('express-session')
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient()
+
 // loading body-parser
 const bodyParser = require('body-parser')
 
@@ -34,7 +40,8 @@ cookie : {
     maxAge: SESS_LIFETIME,
     sameSite: true,
     secure: IN_PROD
-}
+},
+store: new RedisStore({ client: redisClient })
 }));
 
 // mounting our routers
