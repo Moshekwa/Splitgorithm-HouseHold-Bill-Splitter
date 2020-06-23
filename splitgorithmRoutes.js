@@ -138,17 +138,17 @@ router.post('/api/sendInvite', (req, res) => {
 
 router.get('/api/list', function (req, res) {
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmUsers')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       res.send(result.recordset)
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -210,15 +210,15 @@ router.get('/api/groups', function (req, res) {
 
 router.post('/api/joingroup', function (req, res) {
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       const dbRequest = pool.request()
       dbRequest.input('groupName', `${req.body.groupName}`)
       return dbRequest
-      // perfoming a query
+        // perfoming a query
         .query('select groupName from SplitgorithmGroups WHERE groupName =  @groupName')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       if (result.recordset[0].groupName === req.body.groupName) { // checking if a group exists
         db.pools
@@ -237,7 +237,7 @@ router.post('/api/joingroup', function (req, res) {
           })
       }
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -305,7 +305,7 @@ router.get('/api/viewHouseExpenses', function (req, res) {
       const dbrequest = pool.request()
       dbrequest.input('group', group)
       return dbrequest
-      // perfoming a query
+        // perfoming a query
         .query(`SELECT memberUserName, role, ${expenseName}Contribution, ${expenseName}OwedTo FROM ${group}`)
     })
     .then(data => {
@@ -313,7 +313,7 @@ router.get('/api/viewHouseExpenses', function (req, res) {
       console.log(information)
       res.send(information)
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -348,13 +348,13 @@ router.post('/api/profile', function (req, res) {
   let Index = 0
   // Make a query to the database
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmUsers')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       const index = result.recordset.findIndex(function (elem) {
         return elem.username === req.body.currentusername
@@ -380,15 +380,15 @@ router.post('/api/profile', function (req, res) {
         })
     }
     if (req.body.newemail !== '') {
-    // Make a query to the database
+      // Make a query to the database
       db.pools
-      // Run query
+        // Run query
         .then((pool) => {
           const dbrequest = pool.request()
           dbrequest.input('usern', `${req.body.newemail}`)
           dbrequest.input('user', `${name}`)
           return dbrequest
-          // perfoming a query
+            // perfoming a query
             .query('UPDATE SplitgorithmUsers SET email=@usern WHERE name=@user')
         })
     }
@@ -432,13 +432,13 @@ router.post('/api/expenses', function (req, res) {
 
   // Make a query to the database
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmUsers')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       index2 = result.recordset.findIndex(function (elem) {
         return elem.username === req.body.payer
@@ -467,12 +467,12 @@ router.post('/api/expenses', function (req, res) {
               console.log(data)
 
               db.pools
-              // Run query
+                // Run query
                 .then((pool) => {
                   const dbRequest = pool.request()
                   dbRequest.input('groupName', `${req.body.group}`)
                   return dbRequest
-                  // perfoming a query
+                    // perfoming a query
                     .query(`select * from ${req.body.group}`)
                 })
                 .then(result => {
@@ -488,7 +488,7 @@ router.post('/api/expenses', function (req, res) {
                       console.log(sharedPrice)
                       dbRequest.input('expenseDivided', sharedPrice)
                       return dbRequest
-                      // perfoming a query
+                        // perfoming a query
 
                         .query(`ALTER TABLE ${req.body.group} ADD ${req.body.expensename}Contribution VarChar(128), ${req.body.expensename}OwedTo VarChar(128) `)
                     })
@@ -559,7 +559,7 @@ router.post('/api/expenses', function (req, res) {
           })
       })
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -578,7 +578,7 @@ router.post('/api/signup', function (req, res) {
   }
 
   if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' &&
-  memberObject.password !== '' && memberObject.password === req.body.Cpassword) {
+    memberObject.password !== '' && memberObject.password === req.body.Cpassword) {
     validMember = true
     req.session.loggedIn = true
     sessionUsername = memberObject.username
@@ -627,13 +627,13 @@ router.post('/api/welcome', function (req, res) {
 
   // Make a query to the database
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmUsers')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       const index = result.recordset.findIndex(function (elem) {
         return elem.username === req.body.username
@@ -650,7 +650,7 @@ router.post('/api/welcome', function (req, res) {
         } else res.redirect(req.baseUrl + '/welcome')
       } else res.redirect(req.baseUrl + '/welcome')
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -721,7 +721,7 @@ router.get('/api/payments', function (req, res) {
     // Run query
     .then((pool) => {
       const dbrequest = pool.request()
-      // dbrequest.input('group', `${name}`)
+        // dbrequest.input('group', `${name}`)
         // perfoming a query
         .query('select * from Balances')
       return dbrequest
@@ -771,20 +771,20 @@ router.post('/api/payments', function (req, res) {
 
   // Make a query to the database
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmGroups')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
-    // check if entered group exists
+      // check if entered group exists
       index1 = result.recordset.findIndex(function (group) {
         return group.groupName === req.body.group
       })
     })
-  // If there's an error, return that with some description
+    // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
@@ -793,13 +793,13 @@ router.post('/api/payments', function (req, res) {
 
   // Make a query to the database
   db.pools
-  // Run query
+    // Run query
     .then((pool) => {
       return pool.request()
-      // perfoming a query
+        // perfoming a query
         .query('select * from SplitgorithmUsers')
     })
-  // Processing the response
+    // Processing the response
     .then(result => {
       index2 = result.recordset.findIndex(function (elem) {
         return elem.username === req.body.payer
@@ -811,32 +811,32 @@ router.post('/api/payments', function (req, res) {
     groupName = req.body.group
     // Make a query to the database
     db.pools
-    // Run query
+      // Run query
       .then((pool) => {
         const dbRequest = pool.request()
         dbRequest.input('payer', `${req.body.payer}`)
         dbRequest.input('group', `${req.body.group}`)
         return dbRequest
-        // perfoming a query
+          // perfoming a query
           .query('select Name from HouseholdExpenses where GroupName=@group and Payer=@payer')
       })
-    // Processing the response
+      // Processing the response
       .then(result => {
         userExpenses = result.recordset
         // console.log(userExpenses)
         userExpenses.forEach(function (elem) {
           // Make a query to the database
           db.pools
-          // Run query
+            // Run query
             .then((pool) => {
               const dbRequest = pool.request()
               dbRequest.input('payer', `${req.body.payer}`)
 
               return dbRequest
-              // perfoming a query
+                // perfoming a query
                 .query(`select ${elem.Name}Contribution from ${req.body.group}  where ${elem.Name}OwedTo=@payer`)
             })
-          // Processing the response
+            // Processing the response
             .then(result => {
               //   console.log(result.recordset)
               const expenseObject = {
@@ -856,16 +856,16 @@ router.post('/api/payments', function (req, res) {
 
     // Make a query to the database
     db.pools
-    // Run query
+      // Run query
       .then((pool) => {
         const dbRequest = pool.request()
         dbRequest.input('payer', `${req.body.payer}`)
         dbRequest.input('group', `${req.body.group}`)
         return dbRequest
-        // perfoming a query
+          // perfoming a query
           .query('select Name from HouseholdExpenses where GroupName=@group and Payer<>@payer')
       })
-    // Processing the response
+      // Processing the response
       .then(result => {
         //  console.log(result.recordset)
         // keep track of iterations
@@ -874,16 +874,16 @@ router.post('/api/payments', function (req, res) {
         userExpenses.forEach(function (elem) {
           // Make a query to the database
           db.pools
-          // Run query
+            // Run query
             .then((pool) => {
               const dbRequest = pool.request()
               dbRequest.input('payer', `${req.body.payer}`)
               dbRequest.input('posted', 'PostedExpense')
               return dbRequest
-              // perfoming a query
+                // perfoming a query
                 .query(`select ${elem.Name}Contribution from ${req.body.group}  where ${elem.Name}OwedTo <> @payer and ${elem.Name}OwedTo <> @posted`)
             })
-          // Processing the response
+            // Processing the response
 
             .then(result => {
               // console.log(result.recordset)
