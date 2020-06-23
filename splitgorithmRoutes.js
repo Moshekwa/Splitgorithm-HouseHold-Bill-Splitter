@@ -20,17 +20,76 @@ const session = require('./modules/sessions.js')
 const groups = require('./modules/groups.js')
 const { sql } = require('./db.js')
 
+// Redirect webpages which check if a user is authenticated
+const redirectHome = (req, res, next) => {
+  if (!req.session.loggedIn)
+{
+  res.redirect(req.baseUrl + '/homepage')
+} else{
+  next()
+}
+}
+
+const redirectExpenses = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/expenses')
+} else{
+next()
+}
+}
+
+const redirectExpenses = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/expenses')
+} else{
+next()
+}
+}
+
+const redirectMembers = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/members')
+} else{
+next()
+}
+}
+
+const redirectPayments = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/payments')
+} else{
+next()
+}
+}
+
+const redirectProfile = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/profile')
+} else{
+next()
+}
+}
+
+const redirectSignOut = (req, res, next) => {
+if (!req.session.loggedIn)
+{
+res.redirect(req.baseUrl + '/signOut')
+} else{
+next()
+}
+}
+
 router.get('/signup', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'signup.html'))
 })
 
-router.get('/homepage', function (req, res) {
-  if (req.session.loggedIn)
-  { 
+router.get('/homepage', redirectHome, function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
-  else if (!req.session.loggedIn) {
-    res.redirect(req.baseUrl + '/welcome')
-  }
 })
 
 router.get('/members', function (req, res) {
@@ -74,6 +133,8 @@ router.get('/about', function (req, res) {
 router.get('/resetPassword', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
 })
+
+
 
 router.post('/api/sendInvite', (req, res) => {
   console.log('Verifying user group')
