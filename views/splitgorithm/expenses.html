@@ -70,7 +70,22 @@
         </button></div>
         <div> 
             <ol id="expenselist"></ol> 
-         </div>         
+         </div>   
+         <div><p>To see how a certain expense was shared in your hoursehold</p></div> 
+         <div><p>Enter your household name and the expense</p></div>    
+         <div><form action="/splitgorithm/api/sendHouseExpenses" method="POST">
+            <label for="Group Name">Group Name</label><br/>
+            <input type="text" name="Group" placeholder="Enter group name"><br/>
+            <label for="expensename">Expense name</label><br/>
+            <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
+            <div class="post-viewHouseExpenses">
+                <button type="submit" class="button3" >Submit</button>
+            </div>
+        </form></div>   
+        <div><button type="button" id="viewOurExpenses" style="width:10%" >View Expense Contribution</button></div> 
+        <div> 
+            <ol id="contributionList"></ol> 
+         </div>       
     </section>
 </body>
 
