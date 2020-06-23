@@ -134,6 +134,23 @@ router.post('/api/sendInvite', (req, res) => {
         res.redirect(req.baseUrl + '/members')
       }
     })
+  db.pools
+    .then((pool) => {
+      const dbrequest = pool.request()
+      dbrequest.input('Action', 'Invite friend')
+      dbrequest.input('Description', `${req.body.friendname} invited to join ${req.body.userGroup}`)
+      dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+                             ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+      dbrequest.input('GroupTolog', `${req.body.groupName}`)
+      return dbrequest
+        .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
 })
 
 router.get('/api/list', function (req, res) {
@@ -235,6 +252,23 @@ router.post('/api/joingroup', function (req, res) {
           .catch(err => {
             console.log(err)
           })
+        db.pools
+          .then((pool) => {
+            const dbrequest = pool.request()
+            dbrequest.input('Action', 'Joined group')
+            dbrequest.input('Description', `${req.body.userName} joined a group called ${req.body.groupName}`)
+            dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+                             ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+            dbrequest.input('GroupTolog', `${req.body.groupName}`)
+            return dbrequest
+              .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
+          })
+          .then(data => {
+            console.log(data)
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     })
     // If there's an error, return that with some description
@@ -276,6 +310,29 @@ router.post('/api/creategroup', function (req, res) {
       table.create = true
       table.columns.add('groupName', db.sql.VarChar(128), { nullable: false, primary: true })
       table.rows.add(`${req.body.groupName}`)
+      const request = new db.sql.Request()
+      return request.bulk(table)
+    })
+    .then(data => {
+      console.log(data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  db.sql.connect(db.getConfig())
+    .then(() => {
+      console.log('connected')
+
+      const table = new db.sql.Table('GroupLog')
+      table.create = true
+      table.columns.add('action', db.sql.VarChar(128), { nullable: false })
+      table.columns.add('description', db.sql.VarChar(128), { nullable: false })
+      table.columns.add('date', db.sql.VarChar(128), { nullable: false })
+      table.columns.add('groupTolog', db.sql.VarChar(128), { nullable: false })
+      // adding a member in a table
+      table.rows.add('Group created', `${req.body.userName} created a group called ${req.body.groupName}`, `
+      ${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+      ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, `${req.body.groupName}`)
       const request = new db.sql.Request()
       return request.bulk(table)
     })
@@ -446,6 +503,23 @@ router.post('/api/expenses', function (req, res) {
       if (index1 !== -1 && index2 !== -1) {
         console.log(index1)
         if (expenseObject.name !== '' && expenseObject.cost !== '' && expenseObject.cost > 0) {
+          db.pools
+            .then((pool) => {
+              const dbrequest = pool.request()
+              dbrequest.input('Action', 'Posted expense')
+              dbrequest.input('Description', `${req.body.payer} posted ${expenseObject.name}`)
+              dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+                             ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+              dbrequest.input('GroupTolog', `${req.body.groupName}`)
+              return dbrequest
+                .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
+            })
+            .then(data => {
+              console.log(data)
+            })
+            .catch(err => {
+              console.log(err)
+            })
           expenses.addExpense(expenseObject)
           db.sql.connect(db.getConfig())
             .then(() => {
