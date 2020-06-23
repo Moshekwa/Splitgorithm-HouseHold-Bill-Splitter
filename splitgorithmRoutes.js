@@ -24,64 +24,55 @@ const { sql } = require('./db.js')
 const redirectHome = (req, res, next) => {
   if (!req.session.loggedIn)
 {
-  res.redirect(req.baseUrl + '/homepage')
-} else{
+  res.redirect('/welcome')
+} else {
   next()
 }
 }
 
 const redirectExpenses = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/expenses')
-} else{
-next()
-}
-}
-
-const redirectExpenses = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/expenses')
-} else{
-next()
-}
+  if (!req.session.loggedIn)
+  {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 const redirectMembers = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/members')
-} else{
-next()
-}
+  if (!req.session.loggedIn)
+  {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 const redirectPayments = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/payments')
-} else{
-next()
-}
+  if (!req.session.loggedIn)
+  {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 const redirectProfile = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/profile')
-} else{
-next()
-}
+  if (!req.session.loggedIn)
+  {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 const redirectSignOut = (req, res, next) => {
-if (!req.session.loggedIn)
-{
-res.redirect(req.baseUrl + '/signOut')
-} else{
-next()
-}
+  if (!req.session.loggedIn)
+  {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 router.get('/signup', function (req, res) {
@@ -89,40 +80,32 @@ router.get('/signup', function (req, res) {
 })
 
 router.get('/homepage', redirectHome, function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html')) }
+    res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
 })
 
-router.get('/members', function (req, res) {
+router.get('/members',redirectMembers, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'members.html'))
 })
 
-router.get('/expenses', function (req, res) {
+router.get('/expenses',redirectExpenses, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'expenses.html'))
 })
 
-router.get('/profile', function (req, res) {
-  if (req.session.loggedIn) {
+router.get('/profile',redirectProfile,function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'profile.html'))
-  }
-  else { 
-    res.redirect(req.baseUrl + '/welcome')
-  }
 })
 
-router.get('/signOut', function (req, res) {
-  if(req.session.loggedIn)  
-  { 
+router.get('/signOut', redirectSignOut,function (req, res) {
     req.session.destroy(err => {
       if(err){
-      res.redirect(req.baseUrl)  }
-    })
+      res.redirect(req.baseUrl)  
+    } 
     res.redirect(req.baseUrl + '/welcome')
-  }
-  else 
-  {res.redirect(req.baseUrl) + '/welcome'}
 })
 
-router.get('/payments', function (req, res) {
+})
+
+router.get('/payments', redirectPayments,function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
 })
 
@@ -133,8 +116,6 @@ router.get('/about', function (req, res) {
 router.get('/resetPassword', function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'resetPassword.html'))
 })
-
-
 
 router.post('/api/sendInvite', (req, res) => {
   console.log('Verifying user group')
@@ -678,4 +659,5 @@ router.post('/api/resetPassword', (req, res) => {
       res.redirect(req.baseUrl + '/welcome')
     })
 })
+
 module.exports = router
