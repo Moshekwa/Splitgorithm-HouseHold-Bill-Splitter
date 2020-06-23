@@ -714,6 +714,33 @@ router.post('/api/resetPassword', (req, res) => {
     })
 })
 
+router.get('/api/payments', function (req, res) {
+  console.log('Returning Balance from database')
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      const dbrequest = pool.request()
+      // dbrequest.input('group', `${name}`)
+        // perfoming a query
+        .query('select * from Balances')
+      return dbrequest
+    })
+    // Processing the response
+    .then(result => {
+      const data = [result.recordset, OwedTo, Owes, balances, groupName]
+      // console.log(data[0])
+      res.send(data)
+      // console.log(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
 // view balance
 let balances
 let OwedTo
@@ -821,7 +848,8 @@ router.post('/api/payments', function (req, res) {
               })
               console.log(sumOwed)
               balanceObject.Owed = sumOwed
-              OwedTo = sumOwed
+              const owe = Number(sumOwed.toFixed(2))
+              OwedTo = owe
             })
         })
       })
@@ -858,7 +886,7 @@ router.post('/api/payments', function (req, res) {
           // Processing the response
 
             .then(result => {
-              console.log(result.recordset)
+              // console.log(result.recordset)
               const expenseObject = {
                 cont: `${elem.Name}Contribution`
               }
@@ -868,11 +896,12 @@ router.post('/api/payments', function (req, res) {
               })
               if (i === userExpenses.length - 1) {
                 balanceObject.Owes = sumOwes
-                Owes = sumOwes
+                const ower = Number(sumOwes.toFixed(2))
+                Owes = ower
                 console.log(Owes)
-
-                balances = OwedTo - Owes
-                console.log(balances)
+                const bal = Number((OwedTo - Owes).toFixed(2))
+                balances = bal
+                //  console.log(balances)
                 store.addEntry(balanceObject)
                 // create balances table
                 db.sql.connect(db.getConfig())
