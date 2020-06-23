@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: SESS_LIFETIME,
+    maxAge: Number(SESS_LIFETIME),
     sameSite: true,
     secure: IN_PROD
   },
