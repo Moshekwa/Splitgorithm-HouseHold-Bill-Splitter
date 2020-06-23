@@ -4,7 +4,6 @@
 const members = []
 
 // public
-
 module.exports = {
   addMember: function (member) {
     members.push(member)
