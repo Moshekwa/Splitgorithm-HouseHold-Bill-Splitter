@@ -1,22 +1,21 @@
 'use strict'
 
 // Private
-const members = []
+const activeMembers = []
 
 // public
-
 module.exports = {
-  addMember: function (member) {
-    members.push(member)
+  addActiveMember: function (activeMembers) {
+    activeMembers.push(activeMembers)
   },
   isEmpty: function () {
-    if (members.length === 0) return true
+    if (activeMembers.length === 0) return true
     else return false
   },
-  getMember: function (index) {
-    return members[index]
+  getActiveMember: function (index) {
+    return activeMembers[index]
   },
-  getMembers: function () {
-    return members
+  getActiveMembers: function () {
+    return activeMembers
   }
 }
