@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const send = require('./public/script/emailNotification.js')
 let sessionUsername = null // Sessions variable  
-const G_code = Math.random().toString(36).replace('0.', '')
+const gcode = Math.random().toString(36).replace('0.', '')
 let groupToView
 
 // members in a house hold
@@ -19,6 +19,8 @@ const session = require('./modules/sessions.js')
 // household groups
 const groups = require('./modules/groups.js')
 const { sql } = require('./db.js')
+
+
 
 // Redirect webpages which check if a user is authenticated
 const redirectHome = (req, res, next) => {
@@ -508,6 +510,32 @@ router.post('/api/expenses', function (req, res) {
         res.redirect(req.baseUrl + '/expenses')
       } else res.redirect(req.baseUrl + '/expenses')
     })
+  // Email posted expense to the group members
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query(`select memberUserName from ${req.body.group}`)
+    })
+    // Processing the response
+    .then(result => {
+      result.recordset.forEach(member => {
+        db.pools
+          // Run query
+          .then((pool) => {
+            const dbRequest = pool.request()
+            dbRequest.input('userName', `${member.memberUserName}`)
+            return dbRequest
+              // perfoming a query
+              .query(`select email from SplitgorithmUsers where username=@userName`)
+          })
+          .then(result => {
+            send.postedExpense(result.recordset[0].email, expenseObject, member.memberUserName)
+          })
+      })
+    }) 
   // If there's an error, return that with some description
     .catch(err => {
       res.send({
@@ -629,7 +657,7 @@ router.post('/api/generateCode', (req, res) => {
         return elem.username === req.body.username
       })
       if (index >= 0) {
-        send.resetPassword(result.recordset[index].email, result.recordset[index].username, G_code)
+        send.resetPassword(result.recordset[index].email, result.recordset[index].username, gcode)
         res.redirect(req.baseUrl + '/resetPassword')
       } else {
         res.redirect(req.baseUrl + '/generateCode')
@@ -653,7 +681,7 @@ router.post('/api/resetPassword', (req, res) => {
       dbrequest.input('userp', `${bcrypt.hashSync(req.body.password, salt)}`)
       dbrequest.input('nam', `${req.body.username}`)
       // perfoming a query
-      if (G_code === req.body.gcode) {
+      if (gcode === req.body.gcode) {
         return dbrequest
           .query('UPDATE SplitgorithmUsers SET password=@userp WHERE username=@nam')
       }
