@@ -2,6 +2,7 @@
 
 const express = require('express')
 const app = express()
+const env = require('dotenv').config()
 
 // loading body-parser
 const bodyParser = require('body-parser')
@@ -16,14 +17,11 @@ var MemoryStore = require('memorystore')(session)
 const mainRouter = require('./mainRoutes.js')
 const todoRouter = require('./splitgorithmRoutes.js')
 
-const TWO_HOURS = 60 * 60 * 2 * 1000; // The lifespan of a cookie 
-const { 
-    SESS_NAME = 'userSession',
-    SESS_SECRET = 'splitgorithmSessions',
-    SESS_LIFETIME = TWO_HOURS,
-    NODE_ENV = 'development'
-} = process.env
-const IN_PROD = NODE_ENV === 'production' // Production enviroment could be set to deveopment 
+const SESS_NAME = process.env.SESS_NAME
+const SESS_SECRET = process.env.SESS_SECRET
+const SESS_LIFETIME = process.env.SESS_LIFETIME
+const NODE_ENV = process.env.NODE_ENV
+const IN_PROD = NODE_ENV === 'production' // Production enviroment could be set to deveopment
 
 // tell express to use bodyParser for JSON and URL encoded form bodies
 app.use(bodyParser.json())
@@ -31,19 +29,19 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Sessions and Cookies
 app.use(session({
-name: SESS_NAME,
-secret: SESS_SECRET, 
-resave: false, 
-saveUninitialized: false, 
-cookie : {
+  name: SESS_NAME,
+  secret: SESS_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
     maxAge: SESS_LIFETIME,
     sameSite: true,
     secure: IN_PROD
-},  
-store: new MemoryStore({
+  },
+  store: new MemoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
   })
-}));
+}))
 
 // mounting our routers
 app.use('/', mainRouter)
