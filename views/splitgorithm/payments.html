@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payments</title>
     <link rel="stylesheet" href="/cdn/css/homepage.css">
+    <script src="/cdn/script/payments.js"></script>
 </head>
 
 <div class="side-bar">
@@ -57,12 +58,23 @@
                 <button class="button" type="submit">Settle Expense</button><br>
             </div>
         </form>
-        <form action="/splitgorithm/payments" method="GET">
+        <form action="/splitgorithm/api/payments" method="POST">
+            <label for="username">Username</label><br/>
+            <input type="text" name="payer" placeholder="Enter your username"><br/>
+            <label for="Group">Group Name</label><br/>
+            <input type="text" name="group"  id="group" placeholder="Enter group name"><br/>
             <div>
                 <p>Click here to view your balance</p>
-                <button class="button" type="submit">View Balance</button><br>
+                <button class="button" type="submit">Submit</button><br>
             </div>
-        </form>
+           
+        </form> 
+        <button type="button" id="addBalance" style="width:10%" >View Balance
+        </button>
+        <div> 
+            <ol id="balance"></ol> 
+        </div>   
+        
         <form action="/splitgorithm/payments" method="GET">
             <div>
                 <p>Click here to view your payment history</p>

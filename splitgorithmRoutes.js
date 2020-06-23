@@ -5,6 +5,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
+const store = require('./modules/balance.js')
 const send = require('./public/script/emailNotification.js')
 let sessionUsername = null // Sessions variable
 const gcode = Math.random().toString(36).replace('0.', '')
@@ -711,6 +712,228 @@ router.post('/api/resetPassword', (req, res) => {
     .then(result => {
       res.redirect(req.baseUrl + '/welcome')
     })
+})
+
+router.get('/api/payments', function (req, res) {
+  console.log('Returning Balance from database')
+  // Make a query to the database
+  db.pools
+    // Run query
+    .then((pool) => {
+      const dbrequest = pool.request()
+      // dbrequest.input('group', `${name}`)
+        // perfoming a query
+        .query('select * from Balances')
+      return dbrequest
+    })
+    // Processing the response
+    .then(result => {
+      const data = [result.recordset, OwedTo, Owes, balances, groupName]
+      // console.log(data[0])
+      res.send(data)
+      // console.log(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
+// view balance
+let balances
+let OwedTo
+let Owes
+let groupName
+router.post('/api/payments', function (req, res) {
+  // variable to store sum of contribution owed and contribution owed to and by a certain user an
+  let sumOwed = 0
+  let sumOwes = 0
+  const balanceObject = {
+    Owed: 0,
+    Owes: 0,
+    balance: 0,
+    groupName: '',
+    getBalance: function () {
+      this.balance = this.Owed - this.Owes
+      const finalBalance = Number((this.balance).toFixed(2))
+      return finalBalance
+    }
+
+  }
+  // indices for searching through groups table, expenses table and users table
+  let index1
+  let index2
+  // array to store expenses paid for by specific user
+
+  let userExpenses = []
+
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+  // Processing the response
+    .then(result => {
+    // check if entered group exists
+      index1 = result.recordset.findIndex(function (group) {
+        return group.groupName === req.body.group
+      })
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+
+  // Make a query to the database
+  db.pools
+  // Run query
+    .then((pool) => {
+      return pool.request()
+      // perfoming a query
+        .query('select * from SplitgorithmUsers')
+    })
+  // Processing the response
+    .then(result => {
+      index2 = result.recordset.findIndex(function (elem) {
+        return elem.username === req.body.payer
+      })
+    })
+
+  if (index1 !== -1 && index2 !== -1) {
+    balanceObject.groupName = req.body.group
+    groupName = req.body.group
+    // Make a query to the database
+    db.pools
+    // Run query
+      .then((pool) => {
+        const dbRequest = pool.request()
+        dbRequest.input('payer', `${req.body.payer}`)
+        dbRequest.input('group', `${req.body.group}`)
+        return dbRequest
+        // perfoming a query
+          .query('select Name from HouseholdExpenses where GroupName=@group and Payer=@payer')
+      })
+    // Processing the response
+      .then(result => {
+        userExpenses = result.recordset
+        // console.log(userExpenses)
+        userExpenses.forEach(function (elem) {
+          // Make a query to the database
+          db.pools
+          // Run query
+            .then((pool) => {
+              const dbRequest = pool.request()
+              dbRequest.input('payer', `${req.body.payer}`)
+
+              return dbRequest
+              // perfoming a query
+                .query(`select ${elem.Name}Contribution from ${req.body.group}  where ${elem.Name}OwedTo=@payer`)
+            })
+          // Processing the response
+            .then(result => {
+              //   console.log(result.recordset)
+              const expenseObject = {
+                cont: `${elem.Name}Contribution`
+              }
+              result.recordset.forEach(function (expenseCont) {
+                const expenseContrib = Number(expenseCont[`${expenseObject.cont}`])
+                sumOwed = sumOwed + expenseContrib
+              })
+              console.log(sumOwed)
+              balanceObject.Owed = sumOwed
+              const owe = Number(sumOwed.toFixed(2))
+              OwedTo = owe
+            })
+        })
+      })
+
+    // Make a query to the database
+    db.pools
+    // Run query
+      .then((pool) => {
+        const dbRequest = pool.request()
+        dbRequest.input('payer', `${req.body.payer}`)
+        dbRequest.input('group', `${req.body.group}`)
+        return dbRequest
+        // perfoming a query
+          .query('select Name from HouseholdExpenses where GroupName=@group and Payer<>@payer')
+      })
+    // Processing the response
+      .then(result => {
+        //  console.log(result.recordset)
+        // keep track of iterations
+        let i = 0
+        userExpenses = result.recordset
+        userExpenses.forEach(function (elem) {
+          // Make a query to the database
+          db.pools
+          // Run query
+            .then((pool) => {
+              const dbRequest = pool.request()
+              dbRequest.input('payer', `${req.body.payer}`)
+              dbRequest.input('posted', 'PostedExpense')
+              return dbRequest
+              // perfoming a query
+                .query(`select ${elem.Name}Contribution from ${req.body.group}  where ${elem.Name}OwedTo <> @payer and ${elem.Name}OwedTo <> @posted`)
+            })
+          // Processing the response
+
+            .then(result => {
+              // console.log(result.recordset)
+              const expenseObject = {
+                cont: `${elem.Name}Contribution`
+              }
+              result.recordset.forEach(function (expenseCont) {
+                const expenseContrib = Number(expenseCont[`${expenseObject.cont}`])
+                sumOwes = sumOwes + (expenseContrib / result.recordset.length)
+              })
+              if (i === userExpenses.length - 1) {
+                balanceObject.Owes = sumOwes
+                const ower = Number(sumOwes.toFixed(2))
+                Owes = ower
+                console.log(Owes)
+                const bal = Number((OwedTo - Owes).toFixed(2))
+                balances = bal
+                //  console.log(balances)
+                store.addEntry(balanceObject)
+                // create balances table
+                db.sql.connect(db.getConfig())
+                  .then(() => {
+                    console.log('connected')
+
+                    const table = new db.sql.Table(req.body.groupName + 'Balances')
+                    table.create = true
+                    table.columns.add('Group', db.sql.VarChar(128), { nullable: false })
+                    table.columns.add('member', db.sql.VarChar(128), { nullable: false })
+                    table.columns.add('receivableTotal', db.sql.VarChar(128), { nullable: false })
+                    table.columns.add('debtsTotal', db.sql.VarChar(128), { nullable: false })
+                    table.columns.add('Balance', db.sql.VarChar(128), { nullable: false })
+
+                    // adding expense to the table
+                    table.rows.add(store.getEntry(store.getEntrylist().length - 1).groupName, req.body.payer, store.getEntry(store.getEntrylist().length - 1).Owed, store.getEntry(store.getEntrylist().length - 1).Owes, store.getEntry(store.getEntrylist().length - 1).getBalance())
+                    const request = new db.sql.Request()
+                    return request.bulk(table)
+                  })
+                  .then(data => {
+                    console.log(data)
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+                res.redirect(req.baseUrl + '/payments')
+              }
+              i++
+            })
+        })
+      })
+  } else res.redirect(req.baseUrl + '/payments')
 })
 
 module.exports = router
