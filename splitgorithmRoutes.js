@@ -6,7 +6,7 @@ const router = express.Router()
 const bcrypt = require('bcrypt')
 const db = require('./db.js')
 const send = require('./public/script/emailNotification.js')
-let sessionUsername = null // Sessions variable  
+let sessionUsername = null // Sessions variable
 const gcode = Math.random().toString(36).replace('0.', '')
 let groupToView
 
@@ -15,26 +15,22 @@ const members = require('./modules/members.js')
 // expense list for the household
 const expenses = require('./modules/expenses.js')
 // module to manage users sessions
-const session = require('./modules/sessions.js') 
+const session = require('./modules/sessions.js')
 // household groups
 const groups = require('./modules/groups.js')
 const { sql } = require('./db.js')
 
-
-
 // Redirect webpages which check if a user is authenticated
 const redirectHome = (req, res, next) => {
-  if (!req.session.loggedIn)
-{
-  res.redirect('/welcome')
-} else {
-  next()
-}
+  if (!req.session.loggedIn) {
+    res.redirect('/welcome')
+  } else {
+    next()
+  }
 }
 
 const redirectExpenses = (req, res, next) => {
-  if (!req.session.loggedIn)
-  {
+  if (!req.session.loggedIn) {
     res.redirect('/welcome')
   } else {
     next()
@@ -42,8 +38,7 @@ const redirectExpenses = (req, res, next) => {
 }
 
 const redirectMembers = (req, res, next) => {
-  if (!req.session.loggedIn)
-  {
+  if (!req.session.loggedIn) {
     res.redirect('/welcome')
   } else {
     next()
@@ -51,8 +46,7 @@ const redirectMembers = (req, res, next) => {
 }
 
 const redirectPayments = (req, res, next) => {
-  if (!req.session.loggedIn)
-  {
+  if (!req.session.loggedIn) {
     res.redirect('/welcome')
   } else {
     next()
@@ -60,8 +54,7 @@ const redirectPayments = (req, res, next) => {
 }
 
 const redirectProfile = (req, res, next) => {
-  if (!req.session.loggedIn)
-  {
+  if (!req.session.loggedIn) {
     res.redirect('/welcome')
   } else {
     next()
@@ -69,8 +62,7 @@ const redirectProfile = (req, res, next) => {
 }
 
 const redirectSignOut = (req, res, next) => {
-  if (!req.session.loggedIn)
-  {
+  if (!req.session.loggedIn) {
     res.redirect('/welcome')
   } else {
     next()
@@ -82,32 +74,31 @@ router.get('/signup', function (req, res) {
 })
 
 router.get('/homepage', redirectHome, function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
+  res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'homepage.html'))
 })
 
-router.get('/members',redirectMembers, function (req, res) {
+router.get('/members', redirectMembers, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'members.html'))
 })
 
-router.get('/expenses',redirectExpenses, function (req, res) {
+router.get('/expenses', redirectExpenses, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'expenses.html'))
 })
 
-router.get('/profile',redirectProfile,function (req, res) {
+router.get('/profile', redirectProfile, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'profile.html'))
 })
 
-router.get('/signOut', redirectSignOut,function (req, res) {
-    req.session.destroy(err => {
-      if(err){
-      res.redirect(req.baseUrl)  
-    } 
+router.get('/signOut', redirectSignOut, function (req, res) {
+  req.session.destroy(err => {
+    if (err) {
+      res.redirect(req.baseUrl)
+    }
     res.redirect(req.baseUrl + '/welcome')
+  })
 })
 
-})
-
-router.get('/payments', redirectPayments,function (req, res) {
+router.get('/payments', redirectPayments, function (req, res) {
   res.sendFile(path.join(__dirname, 'views', 'splitgorithm', 'payments.html'))
 })
 
@@ -142,7 +133,7 @@ router.post('/api/sendInvite', (req, res) => {
         res.redirect(req.baseUrl + '/members')
       }
     })
-}) 
+})
 
 router.get('/api/list', function (req, res) {
   db.pools
@@ -179,9 +170,9 @@ router.post('/api/groups', function (req, res) {
       const index = result.recordset.findIndex(function (elem) {
         return elem.groupName === req.body.groupview
       })
-       if(index !==-1){
-         groupToView = req.body.groupview
-       }
+      if (index !== -1) {
+        groupToView = req.body.groupview
+      }
       res.redirect(req.baseUrl + '/members')
     })
     // If there's an error, return that with some description
@@ -297,6 +288,38 @@ router.post('/api/creategroup', function (req, res) {
   res.redirect(req.baseUrl + '/members')
 })
 
+let group
+let expenseName
+router.post('/api/sendHouseExpenses', function (req, res) {
+  group = `${req.body.Group}`
+  expenseName = `${req.body.expensename}`
+  res.redirect(req.baseUrl + '/expenses')
+})
+
+router.get('/api/viewHouseExpenses', function (req, res) {
+  // Make a query to the database
+  console.log('Returning The list of Expenses from the database')
+  db.pools
+    .then((pool) => {
+      const dbrequest = pool.request()
+      dbrequest.input('group', group)
+      return dbrequest
+      // perfoming a query
+        .query(`SELECT memberUserName, role, ${expenseName}Contribution, ${expenseName}OwedTo FROM ${group}`)
+    })
+    .then(data => {
+      const information = [data.recordset, expenseName]
+      console.log(information)
+      res.send(information)
+    })
+  // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
 router.get('/api/expenselist', function (req, res) {
   // Make a query to the database
   console.log('Returning The list of Expenses from the database')
@@ -318,7 +341,6 @@ router.get('/api/expenselist', function (req, res) {
       })
     })
 })
-
 
 router.post('/api/profile', function (req, res) {
   let name = ''
@@ -529,20 +551,20 @@ router.post('/api/expenses', function (req, res) {
             dbRequest.input('userName', `${member.memberUserName}`)
             return dbRequest
               // perfoming a query
-              .query(`select email from SplitgorithmUsers where username=@userName`)
+              .query('select email from SplitgorithmUsers where username=@userName')
           })
           .then(result => {
             send.postedExpense(result.recordset[0].email, expenseObject, member.memberUserName)
           })
       })
-    }) 
+    })
   // If there's an error, return that with some description
     .catch(err => {
       res.send({
         Error: err
       })
     })
-  })
+})
 
 router.post('/api/signup', function (req, res) {
   console.log('Signing up the following member:', req.body.name)
@@ -558,7 +580,7 @@ router.post('/api/signup', function (req, res) {
   memberObject.password !== '' && memberObject.password === req.body.Cpassword) {
     validMember = true
     req.session.loggedIn = true
-    sessionUsername = memberObject.username   
+    sessionUsername = memberObject.username
     req.session.user = sessionUsername
     members.addMember(memberObject)
     send.welcomeMail(members.getMember(members.getMembers().length - 1).email, members.getMember(members.getMembers().length - 1).username)
@@ -601,7 +623,7 @@ router.get('/welcome', function (req, res) {
 
 router.post('/api/welcome', function (req, res) {
   console.log('Signing in the following member:', req.body.username)
- 
+
   // Make a query to the database
   db.pools
   // Run query
@@ -621,7 +643,7 @@ router.post('/api/welcome', function (req, res) {
         if (bcrypt.compareSync(req.body.password, result.recordset[index].password) === true) {
           sessionUsername = result.recordset[index].username
           //  Ensuring the session is initiaized upon logging in
-          req.session.loggedIn = true   
+          req.session.loggedIn = true
           req.session.user = sessionUsername
           res.redirect(req.baseUrl + '/homepage')
         } else res.redirect(req.baseUrl + '/welcome')

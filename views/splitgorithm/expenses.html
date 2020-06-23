@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expenses</title>
     <script src="/cdn/script/viewExpenses.js"></script>
+    <script src="/cdn/script/viewExpenseContri.js"></script>
+    
     <link rel="stylesheet" href="/cdn/css/homepage.css">
     <link rel="stylesheet" href="/cdn/css/members.css">
 </head>
@@ -70,7 +72,24 @@
         </button></div>
         <div> 
             <ol id="expenselist"></ol> 
-         </div>         
+         </div>  
+         <center>
+         <div><p>To see how a certain expense was shared in your hoursehold</p></div> 
+         <div><p>Enter your household name and the expense</p></div>    
+         <div><form action="/splitgorithm/api/sendHouseExpenses" method="POST">
+            <label for="Group Name">Group Name</label><br/>
+            <input type="text" name="Group" placeholder="Enter group name"><br/>
+            <label for="expensename">Expense name</label><br/>
+            <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
+            <div class="post-viewHouseExpenses">
+                <button type="submit" class="button3" >Submit</button>
+            </div>
+        </form></div>   
+        <div><button type="button" id="viewOurExpenses" style="width:10%" >View Expense Contribution</button></div> 
+        <div> 
+            <ol id="contributionList"></ol> 
+         </div> 
+        </center>       
     </section>
 </body>
 
