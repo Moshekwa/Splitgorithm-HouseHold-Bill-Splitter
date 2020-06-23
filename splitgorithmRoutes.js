@@ -529,6 +529,9 @@ router.post('/api/signup', function (req, res) {
   if (memberObject.name !== '' && memberObject.username !== '' && memberObject.email !== '' &&
   memberObject.password !== '' && memberObject.password === req.body.Cpassword) {
     validMember = true
+    req.session.loggedIn = true
+    sessionUsername = memberObject.username   
+    req.session.user = sessionUsername
     members.addMember(memberObject)
     send.welcomeMail(members.getMember(members.getMembers().length - 1).email, members.getMember(members.getMembers().length - 1).username)
     res.redirect(req.baseUrl + '/homepage')
