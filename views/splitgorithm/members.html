@@ -7,12 +7,13 @@
     <title>Members</title>
     <script src="/cdn/script/viewMembers.js"></script>
     <script src="/cdn/script/viewGroup.js"></script>
+    <script src="/cdn/script/log.js"></script>
     <link rel="stylesheet" href="/cdn/css/members.css">
 </head>
 
 <div class="side-bar">
     <header>Splitgorithm
-    <!-- <img src="/cdn/images/logo.jpg" alt="CSGO Howl" style="float:left" ;> -->
+        <!-- <img src="/cdn/images/logo.jpg" alt="CSGO Howl" style="float:left" ;> -->
     </header>
     <form action="/splitgorithm/homepage" method="GET">
         <div>
@@ -49,38 +50,42 @@
 <body>
     <section>
         <div class="content" id="buttons">
-            <center><h1>Household Membership</h1>            
-            <button type="button" id="addButton1" class="buttons1  active" >Groups</button><!--
-            --><button type="button" id="addButton2" class="buttons1" >Members</button><!-- 
-            --><button type="button" id="addButton3" class="buttons1" >Other</button>
+            <center>
+                <h1>Household Membership</h1>
+                <button type="button" id="addButton1" class="buttons1  active">Groups</button>
+                <!--
+            --><button type="button" id="addButton2" class="buttons1">Members</button>
+                <!-- 
+            --><button type="button" id="addButton3" class="buttons1">Other</button>
             </center>
-            <div> 
-               <ol id="membersList"></ol> 
-            </div>         
+            <div>
+                <ol id="membersList"></ol>
+            </div>
         </div>
         <span class="line"></span>
-        <div class="boxes" id="onclick" >
+        <div class="boxes" id="onclick">
             <div class="create-group">
                 <h2>Create new group</h2>
                 <form action="/splitgorithm/api/creategroup" method="post">
                     <div><label for="GroupName">Group Name:</label>
-                    <input type="text" id="groupname" name="groupName"><br/>
-                    <div></div><label for="UserName">Your username:</label>
-                    <input type="text" id="username" name="userName"></div>
+                        <input type="text" id="groupname" name="groupName"><br />
+                        <div></div><label for="UserName">Your username:</label>
+                        <input type="text" id="username" name="userName">
+                    </div>
                     <button class="buttons2" type="submit">Create group</button>
                 </form>
                 <span class="line"></span>
-             </div>
+            </div>
             <div class="join-group">
                 <h2>Join existing group</h2>
                 <form action="/splitgorithm/api/joingroup" method="post">
                     <div><label for="GroupName">Group Name:</label>
-                    <input type="text" id="groupname" name="groupName"><br/>
-                    <div><label for="UserName">Your username:</label>
-                    <input type="text" id="username" name="userName"></div>
-                    <div class="button">
-                        <button class="buttons2" type="submit">Join group</button>
-                    </div>
+                        <input type="text" id="groupname" name="groupName"><br />
+                        <div><label for="UserName">Your username:</label>
+                            <input type="text" id="username" name="userName"></div>
+                        <div class="button">
+                            <button class="buttons2" type="submit">Join group</button>
+                        </div>
                 </form>
             </div>
             <div class="view-group">
@@ -96,14 +101,17 @@
                     <button class="buttons4" type="button" id="buttons4">View group</button>
                 </div>
             </div>
-            <div class="list" ><p></p>
+            <div class="list">
+                <p></p>
                 <ol id="groupNames">Group Members</ol>
             </div>
             <div class="send-invite">
                 <h2>Invite your friend</h2>
                 <form action="/splitgorithm/api/sendinvite" method="POST">
                     <div><label for="userGroup">Group to Join:</label>
-                        <input type="text" id="userGroup" name="userGroup"><br> 
+                        <input type="text" id="userGroup" name="userGroup"><br>
+                        <label for="userName">Your username:</label>
+                        <input type="text" id="userName" name="userName"><br>
                         <label for="friendname">Friend Name:</label>
                         <input type="text" id="friendname" name="friendname"><br />
                         <label for="friendemail">Friend Email:</label>
@@ -112,28 +120,45 @@
                     <button class="buttons5" type="submit">SEND</button>
                 </form>
             </div>
+            <div class="view-log">
+                <h2>View group log</h2>
+                <form action="/splitgorithm/api/viewLog" method="POST">
+                    <div><label for="viewlogg">Group Name:</label>
+                        <input type="text" id="showlog" name="showlog"><br/>
+                        <div class="logButton">
+                            <button class="buttons6" type="submit" id="buttons6">Submit</button>
+                        </div>
+                </form>
+                <div class="logButton">
+                    <button class="buttons7" type="button" id="buttons7">View log</button>
+                </div>
+            </div>
+            <div class="list">
+                <p></p>
+                <ol id="log">Group log</ol>
+            </div>
         </div>
 
-    <script>
-        function myFunction() {
-            var x = document.getElementById("onclick");
-            if (x.style.display === "block") {
-                x.style.display = "none";
-            } else {
-                x.style.display = "block";
+        <script>
+            function myFunction() {
+                var x = document.getElementById("onclick");
+                if (x.style.display === "block") {
+                    x.style.display = "none";
+                } else {
+                    x.style.display = "block";
+                }
             }
-        }
-        // Add active class to the current button (highlight it)
-        var header = document.getElementById("buttons");
-        var btns = header.getElementsByClassName("buttons1");
-        for (var i = 0; i < btns.length; i++){
-            btns[i].addEventListener("click", function () {
-            var current = document.getElementsByClassName("active");
-            current[0].className = current[0].className.replace(" active", "");
-            this.className += " active";
-            });
-        }
-          </script>
+            // Add active class to the current button (highlight it)
+            var header = document.getElementById("buttons");
+            var btns = header.getElementsByClassName("buttons1");
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].addEventListener("click", function () {
+                    var current = document.getElementsByClassName("active");
+                    current[0].className = current[0].className.replace(" active", "");
+                    this.className += " active";
+                });
+            }
+        </script>
     </section>
 </body>
 

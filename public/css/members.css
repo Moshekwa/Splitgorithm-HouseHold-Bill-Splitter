@@ -214,7 +214,7 @@ input{
 
  .list {
   height: 0vw;
-  width: auto;
+  width: 25vw;
   font-size: 2vw;
   list-style: square inside url("sqpurple.gif");
   list-style-position: outside;
@@ -274,5 +274,68 @@ input{
 }
 
 .buttons5:hover {
+  background-color: rgb(169,169,169);
+} 
+
+
+.view-log {
+    width: 35vw;
+    height: auto;
+    font-size: 2vw;
+    color:#063146;
+    line-height: 5vw;
+    text-align: center;
+    -webkit-background-size:cover;
+    background-size: cover;
+    background-position: center center;  
+    position: absolute;
+    transform: translate(140%,45%);
+}
+
+.buttons6{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
+  height: 2vw;
+  width: 5vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  transition: .4s;
+  transform: translate(270%,-250%);
+}
+
+.buttons6:hover {
+  background-color: rgb(169,169,169);
+} 
+
+.buttons7{
+  font-size: 2vw;
+  border: #002211 solid .1vw;
+  outline: none;
+  padding: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 10px; 
+  color:#002211;
+  height: 3vw;
+  width: 8vw;
+  line-height: 1vw;
+  font-size: 1vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+  transition: .4s;
+  transform: translate(12vw,-7vw);
+}
+
+.buttons7:hover {
   background-color: rgb(169,169,169);
 } 
