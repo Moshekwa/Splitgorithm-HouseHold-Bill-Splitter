@@ -868,11 +868,6 @@ router.post('/api/settleExpense', function (req, res) {
                 return dbrequest
                   .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
               })
-              .catch(err => {
-                res.send({
-                  Error: err
-                }) 
-              })
               res.redirect(req.baseUrl + '/payments')
         } else res.redirect(req.baseUrl + '/payments')  
 })

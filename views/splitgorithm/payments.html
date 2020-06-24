@@ -7,6 +7,7 @@
     <title>Payments</title>
     <link rel="stylesheet" href="/cdn/css/homepage.css">
     <script src="/cdn/script/payments.js"></script>
+    <link rel="stylesheet" href="/cdn/css/payments.css">
 </head>
 
 <div class="side-bar">
@@ -50,35 +51,35 @@
             <h1>HouseHold Payment Management</h1>
         </center>
         </div>
-        <div>  
-        <form action="/splitgorithm/api/settleExpense" method="POST">
-                <div>
-                    <P> This is where we proces ur payment </P>
-                <label for="Group">Group Name</label><br/>
-                <input type="text" name="group"  id="group" placeholder="Enter group name"><br/>
-                <label for="Group">Expense being settled: </label><br/>
-                <input type="text" name="expensename"  id="settle" placeholder="Pleas enter the name of the expense u are setting"><br/>
-                <div>
-                    <p>Click here to Process your payment</p>
-                    <button class="button" type="submit">Process Payment</button><br>
-                </div>
-                </div>
-        </form>
-        <form action="/splitgorithm/api/payments" method="POST">
-            <label for="username">Username</label><br/>
+        <div class="settle">  
+            <form action="/splitgorithm/api/settleExpense" method="POST">
+                    <h2> Payment proccessing </h2>
+                    <label for="Group">Group Name:</label>
+                    <input type="text" name="group"  id="group" placeholder="Enter group name"><br/>
+                    <label for="Group">Expense being settled: </label>
+                    <input type="text" name="expensename"  id="settle" placeholder="Pleas enter the name of the expense u are setting"><br/>
+                    <div>
+                        <button class="button1" type="submit">Process Payment</button><br>
+                    </div>
+                    </div>
+            </form>
+        </div>
+        <div class="payments">
+            <h2>View your balance</h2>
+            <form action="/splitgorithm/api/payments" method="POST">
+            <label for="username">Username:</label>
             <input type="text" name="payer" placeholder="Enter your username"><br/>
-            <label for="Group">Group Name</label><br/>
+            <label for="Group">Group Name:</label>
             <input type="text" name="group"  id="group" placeholder="Enter group name"><br/>
             <div>
-                <p>Click here to view your balance</p>
-                <button class="button" type="submit">Submit</button><br>
+                <button class="button2" type="submit">Submit</button><br>
             </div>
-           
-        </form> 
-        <button type="button" id="addBalance" style="width:10%" >View Balance
+            </form> 
+        </div>
+        <button type="button" id="addBalance" class="button3" >View Balance
         </button>
         <div> 
-            <ol id="balance"></ol> 
+            <ol id="balance" class="list"></ol> 
         </div>   
         </div>    
     </section>
