@@ -856,7 +856,18 @@ router.post('/api/settleExpense', function (req, res) {
                   // perfoming a query
                   .query(`UPDATE ${req.body.group} SET ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
                 })       
-              }) 
+              })
+            db.pools
+              .then((pool) => {
+                const dbrequest = pool.request()
+                dbrequest.input('Action', 'Settled expense')
+                dbrequest.input('Description', `${sessionUsername} paid for ${req.body.expensename}`)
+                dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+                                ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+                dbrequest.input('GroupTolog', `${req.body.group}`)
+                return dbrequest
+                  .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
+              })
               .catch(err => {
                 res.send({
                   Error: err
