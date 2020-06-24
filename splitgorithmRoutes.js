@@ -714,6 +714,77 @@ router.post('/api/resetPassword', (req, res) => {
     })
 })
 
+router.post('/api/settleExpense', function (req, res) {
+
+    let index1 
+    let index2 
+    // Make a query to the database
+    db.pools
+    // Run query
+      .then((pool) => {
+        return pool.request()
+        // perfoming a query
+          .query('select * from SplitgorithmGroups')
+      })
+    // Processing the response
+      .then(result => {
+      // check if entered group exists
+        index1 = result.recordset.findIndex(function (group) {
+          return group.groupName === req.body.group
+        })
+      })
+    // If there's an error, return that with some description
+      .catch(err => {
+        res.send({
+          Error: err
+        })
+      })
+    // Make a query to the database
+    db.pools
+    // Run query
+      .then((pool) => {
+        return pool.request()
+        // perfoming a query
+          .query('select * from SplitgorithmUsers')
+      })
+    // Processing the response
+      .then(result => {
+         index2 = result.recordset.findIndex(function (elem) {
+        return elem.username === sessionUsername
+        })
+      })
+
+      if (index1 !== -1 && index2 !== -1) {
+        db.pools
+        // Run query
+          .then((pool) => {
+            const dbRequest = pool.request()
+            dbRequest.input('groupName', `${req.body.group}`)
+            return dbRequest
+            // perfoming a query
+              .query(`select * from ${req.body.group}`)
+          }) 
+          .catch(err => {
+            res.send({
+              Error: err
+            }) })
+            db.pools
+              .then(result => {
+                db.pools
+                .then(pool => {
+                  const dbRequest = pool.request()
+                  dbRequest.input('groupName', `${req.body.group}`)
+                  dbRequest.input('payer',`${sessionUsername}`)
+                  dbRequest.input('paid', 'SettledExpense')
+                  return dbRequest
+                                
+                  // perfoming a query
+                  .query(`UPDATE ${req.body.group} SET ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
+                })       
+              }) 
+        } else res.redirect(req.baseUrl + '/payments')  
+})
+
 router.get('/api/payments', function (req, res) {
   console.log('Returning Balance from database')
   // Make a query to the database
