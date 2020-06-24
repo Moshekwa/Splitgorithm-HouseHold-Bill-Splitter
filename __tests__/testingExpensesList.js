@@ -1,7 +1,7 @@
 /* eslint-env jest */
 'use strict'
 
-// members list array
+// expenses list array
 const expensesList = require('../modules/expenses.js')
 
 describe('A query to check if expenses list is empty', () => {
