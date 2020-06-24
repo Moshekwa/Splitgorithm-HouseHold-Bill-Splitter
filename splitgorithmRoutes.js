@@ -129,27 +129,26 @@ router.post('/api/sendInvite', (req, res) => {
       })
       if (index !== 0) {
         send.inviteFriends(req.body.friendname, req.body.friendemail, req.body.userGroup)
+        db.pools
+          .then((pool) => {
+            const dbrequest = pool.request()
+            dbrequest.input('Action', 'Invite friend')
+            dbrequest.input('Description', `${req.body.userName} invited ${req.body.friendname} to join ${req.body.userGroup} group`)
+            dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
+                             ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
+            dbrequest.input('GroupTolog', `${req.body.userGroup}`)
+            return dbrequest
+              .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
+          })
+          .catch(err => {
+            res.send({
+              Error: err
+            })
+          })
         res.redirect(req.baseUrl + '/members')
       } else {
         res.redirect(req.baseUrl + '/members')
       }
-    })
-  db.pools
-    .then((pool) => {
-      const dbrequest = pool.request()
-      dbrequest.input('Action', 'Invite friend')
-      dbrequest.input('Description', `${req.body.friendname} invited to join ${req.body.userGroup}`)
-      dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
-                             ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
-      dbrequest.input('GroupTolog', `${req.body.groupName}`)
-      return dbrequest
-        .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
-    })
-    .then(data => {
-      console.log(data)
-    })
-    .catch(err => {
-      console.log(err)
     })
 })
 
@@ -507,15 +506,17 @@ router.post('/api/expenses', function (req, res) {
             .then((pool) => {
               const dbrequest = pool.request()
               dbrequest.input('Action', 'Posted expense')
-              dbrequest.input('Description', `${req.body.payer} posted ${expenseObject.name}`)
+              dbrequest.input('Description', `${req.body.payer} posted ${req.body.expensename}`)
               dbrequest.input('Date', `${new Date().getFullYear()}-${(new Date().getMonth() + 1)}-${new Date().getDate()} 
                              ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`)
-              dbrequest.input('GroupTolog', `${req.body.groupName}`)
+              dbrequest.input('GroupTolog', `${req.body.group}`)
               return dbrequest
                 .query(`INSERT INTO GroupLog(action, description, date, groupTolog) VALUES (@Action, @Description, @Date, @GroupTolog)`)
             })
-            .then(data => {
-              console.log(data)
+            .catch(err => {
+              res.send({
+                Error: err
+              })
             })
             .catch(err => {
               console.log(err)
@@ -1008,6 +1009,61 @@ router.post('/api/payments', function (req, res) {
         })
       })
   } else res.redirect(req.baseUrl + '/payments')
+})
+
+router.get('/api/viewLog', function (req, res) {
+  // Make a query to the database
+  console.log('Returning group log from the database')
+  db.pools
+    // Run query
+    .then((pool) => {
+      const dbRequest = pool.request()
+      dbRequest.input('group', `${groupToView}`)
+      return dbRequest
+        // perfoming a query
+        .query('select * from GroupLog where groupToLog=@group')
+    })
+    // Processing the response
+    .then(result => {
+      console.log('Returning group log from the database')
+      res.send(result.recordset)
+      console.log(result.recordset)
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
+})
+
+router.post('/api/viewLog', function (req, res) {
+  // res.json(groups.getGroups()) // Respond with JSON
+  // Make a query to the database
+  console.log("Fetching log results")
+  db.pools
+    // Run query
+    .then((pool) => {
+      return pool.request()
+        // perfoming a query
+        .query('select * from SplitgorithmGroups')
+    })
+    // Processing the response
+    .then(result => {
+      const index = result.recordset.findIndex(function (elem) {
+        return elem.groupName === req.body.showlog
+      })
+      if (index !== -1) {
+        groupToView = req.body.showlog
+      }
+      res.redirect(req.baseUrl + '/members')
+    })
+    // If there's an error, return that with some description
+    .catch(err => {
+      res.send({
+        Error: err
+      })
+    })
 })
 
 module.exports = router

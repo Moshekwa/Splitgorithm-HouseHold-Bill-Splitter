@@ -214,7 +214,7 @@ input{
 
  .list {
   height: 0vw;
-  width: auto;
+  width: 25vw;
   font-size: 2vw;
   list-style: square inside url("sqpurple.gif");
   list-style-position: outside;
@@ -289,7 +289,7 @@ input{
     background-size: cover;
     background-position: center center;  
     position: absolute;
-    transform: translate(140%,25%);
+    transform: translate(140%,45%);
 }
 
 .buttons6{

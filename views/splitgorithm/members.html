@@ -7,6 +7,7 @@
     <title>Members</title>
     <script src="/cdn/script/viewMembers.js"></script>
     <script src="/cdn/script/viewGroup.js"></script>
+    <script src="/cdn/script/log.js"></script>
     <link rel="stylesheet" href="/cdn/css/members.css">
 </head>
 
@@ -109,8 +110,8 @@
                 <form action="/splitgorithm/api/sendinvite" method="POST">
                     <div><label for="userGroup">Group to Join:</label>
                         <input type="text" id="userGroup" name="userGroup"><br>
-                        <label for="userGroup">User:</label>
-                        <input type="text" id="userGroup" name="userGroup"><br>
+                        <label for="userName">Your username:</label>
+                        <input type="text" id="userName" name="userName"><br>
                         <label for="friendname">Friend Name:</label>
                         <input type="text" id="friendname" name="friendname"><br />
                         <label for="friendemail">Friend Email:</label>
@@ -120,10 +121,10 @@
                 </form>
             </div>
             <div class="view-log">
-                <h2>View your log</h2>
-                <form action="/splitgorithm/api/viewlog" method="POST">
-                    <div><label for="viewlog">Group Name:</label>
-                        <input type="text" id="showlog" name="showlog"><br />
+                <h2>View group log</h2>
+                <form action="/splitgorithm/api/viewLog" method="POST">
+                    <div><label for="viewlogg">Group Name:</label>
+                        <input type="text" id="showlog" name="showlog"><br/>
                         <div class="logButton">
                             <button class="buttons6" type="submit" id="buttons6">Submit</button>
                         </div>
@@ -131,6 +132,10 @@
                 <div class="logButton">
                     <button class="buttons7" type="button" id="buttons7">View log</button>
                 </div>
+            </div>
+            <div class="list">
+                <p></p>
+                <ol id="log">Group log</ol>
             </div>
         </div>
 
