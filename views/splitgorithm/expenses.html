@@ -9,7 +9,7 @@
     <script src="/cdn/script/viewExpenseContri.js"></script>
     
     <link rel="stylesheet" href="/cdn/css/homepage.css">
-    <link rel="stylesheet" href="/cdn/css/members.css">
+    <link rel="stylesheet" href="/cdn/css/expenses.css">
 </head>
 
 <div class="side-bar">
@@ -54,40 +54,40 @@
             </center>
         </div>
     </form>
-    <div>
+    <div class="post-expense">
     <form action="/splitgorithm/api/expenses" method="POST">
-        <label for="expensename">Expense name</label><br/>
+        <h2>Use the following to post an expense</h2>
+        <label for="expensename">Expense name:</label>
         <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
-        <label for="Amount">Cost</label><br/>
+        <label for="Amount">Expense cost:</label>
         <input type="number" name="cost" placeholder="Enter cost of expense"><br/>
-        <label for="Payer">Payer</label><br/>
+        <label for="Payer">Expense payer:</label>
         <input type="text" name="payer" placeholder="Enter your username"><br/>
-        <label for="Group Name">Group Name</label><br/>
+        <label for="Group Name">Group Name:</label>
         <input type="text" name="group" placeholder="Enter group name">
         <div class="post-expense">
             <button type="submit" class="button3" >Post Expense</button>
         </div>
-    </form>  
-        <button type="button" id="addexpense" style="width:10%" >View Expenses
-        </button></div>
-        <div> 
+        </form>  
+    </div>
+        <div > 
             <ol id="expenselist"></ol> 
          </div>  
          <center>
-         <div><p>To see how a certain expense was shared in your hoursehold</p></div> 
-         <div><p>Enter your household name and the expense</p></div>    
+         <div class="share-expense"><h2>Use the following to see how an expense is shared</h2>     
          <div><form action="/splitgorithm/api/sendHouseExpenses" method="POST">
-            <label for="Group Name">Group Name</label><br/>
+            <label for="Group Name">Group Name:</label>
             <input type="text" name="Group" placeholder="Enter group name"><br/>
-            <label for="expensename">Expense name</label><br/>
-            <input type="text" name="expensename" placeholder="Enter name of expense"><br/>
+            <label for="expensename">Expense name:</label>
+            <input type="text" name="expensename" placeholder="Enter name of expense">
             <div class="post-viewHouseExpenses">
-                <button type="submit" class="button3" >Submit</button>
+                <button type="submit" class="button4" >Submit</button>
             </div>
         </form></div>   
-        <div><button type="button" id="viewOurExpenses" style="width:10%" >View Expense Contribution</button></div> 
-        <div> 
-            <ol id="contributionList"></ol> 
+        <div><button type="button" id="viewOurExpenses" class="button5">View Expense Contribution</button></div> 
+        </div>
+        <div > 
+            <ol id="contributionList" class="list"></ol> 
          </div> 
         </center>       
     </section>

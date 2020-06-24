@@ -155,3 +155,33 @@ input{
   color:#fff;
 }
 
+ .button3 { 
+  font-size: 1vw;
+  color:#002211;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 100;
+  letter-spacing: 1px;
+  cursor: pointer;
+  width: auto;
+  height: 5%;
+  top: 0%;
+  left: 2.1vw; 
+  transform: translate(0%,10%); 
+} 
+ .button1 { 
+  font-size: 1vw;
+  color:#002211;
+  outline: none;
+  padding: auto;
+  text-align: center;
+  font-weight: 100;
+  letter-spacing: 1px;
+  cursor: pointer;
+  width: auto;
+  height: 5%;
+  top: 0%;
+  left: 2.1vw; 
+  transform: translate(0%,10%); 
+} 

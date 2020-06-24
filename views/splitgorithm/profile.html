@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="/cdn/css/homepage.css">   
+    <link rel="stylesheet" href="/cdn/css/profile.css">
 </head>
 
 <div class="side-bar">
@@ -45,25 +46,26 @@
 <body>
     <section>
         <div class="content">
-            <center>
-                    <h1>Your profile</h1>
+            <center><h1>Update profile</h1></center>
+        </div>
+        <div class="profile"><center>
                     <form action="/splitgorithm/api/profile" method="post">
-                    <div><label for="CurrentUsername">Current Username:</label></div>
-                    <div><input type="text" id="username" name="currentusername"></div>
-                    <div><label for="newUsername">New Username:</label></div>
-                    <div><input type="text" id="username" name="newusername"></div>
-                    <div><label for="MemberEmail" >Email:</label></div>
-                    <div><input type="text" id="memberemail" name="newemail"></div>
-                    <div class="button">
-                        <button type="submit">Update Profile</button>
+                    <label for="CurrentUsername">Current Username:</label>
+                    <input type="text" id="username" name="currentusername"><br/>
+                    <label for="newUsername">New Username:</label>
+                    <input type="text" id="username" name="newusername"><br/>
+                    <label for="MemberEmail" >Email:</label>
+                    <input type="text" id="memberemail" name="newemail">
+                    <div >
+                        <button type="submit" class="button2">Update Profile</button>
                     </div>
                 </form>
-                <button type="button" id="profile" style="width:10%" >View Profile
+                <button type="button" id="profile" class="button3"" >View Profile
                 </button></div>
                 <div> 
                     <ol id="Profile"></ol> 
                  </div>   
-            </center>
+        </center>
         </div>
     </section>
 </body>
