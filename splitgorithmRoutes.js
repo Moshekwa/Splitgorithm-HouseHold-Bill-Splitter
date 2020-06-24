@@ -782,6 +782,12 @@ router.post('/api/settleExpense', function (req, res) {
                   .query(`UPDATE ${req.body.group} SET ${req.body.expensename}OwedTo =@paid WHERE memberUserName =@payer`)
                 })       
               }) 
+              .catch(err => {
+                res.send({
+                  Error: err
+                }) 
+              })
+              res.redirect(req.baseUrl + '/payments')
         } else res.redirect(req.baseUrl + '/payments')  
 })
 

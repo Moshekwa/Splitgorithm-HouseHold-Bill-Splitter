@@ -29,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Sessions and Cookies
 app.use(session({
-  //name: SESS_NAME,
-  secret: 'SESS_SECRE',
+  name: SESS_NAME,
+  secret: SESS_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
